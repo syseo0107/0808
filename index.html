@@ -237,6 +237,15 @@ h2,h3,section.part,header,.jump{scroll-margin-top:calc(16px + env(safe-area-inse
   .shell.open .side .grid14 a{height:44px}
   .shell.open .side .close{display:block;margin-left:auto;height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--body);cursor:pointer}
 }
+h4.sub{margin:34px 0 10px;font-size:16.5px}
+code{overflow-wrap:anywhere}
+.dia-t,.pt{overflow-wrap:anywhere}
+table.gl td:first-child{white-space:nowrap}
+table.gl td:first-child code{white-space:nowrap}
+@media (max-width:720px){table.gl td:first-child,table.gl td:first-child code{white-space:normal;word-break:break-all}}
+.chain{display:flex;flex-wrap:wrap;gap:10px 26px;align-items:flex-start}
+.chain .panel{position:relative}
+.chain .panel:not(:last-child)::after{content:"→";position:absolute;right:-20px;top:50%;color:var(--muted);font-family:var(--mono)}
 </style>
 
 </head>
@@ -292,7 +301,12 @@ h2,h3,section.part,header,.jump{scroll-margin-top:calc(16px + env(safe-area-inse
   <div class="plain"><b>요리에 빗대면</b><p>시험의 14문항은 요리 한 번의 순서와 같습니다. 도구를 꺼내고 재료를 들여오는 것이 <b>데이터 분석</b>, 상한 곳을 도려내고 크기를 맞춰 써는 것이 <b>전처리</b>, 불에 올려 익히고 맛을 보는 것이 <b>모델링</b>입니다. 재료 손질을 건너뛰면 요리가 안 되듯, 전처리가 틀리면 모델 문항이 실행되지 않습니다.</p></div>
   <figure class="dia"><div class="dia-t">14문항이 이어지는 길</div><div class="dia-b"><div class="lane"><b>데이터 분석<small>문항 1~4</small></b><div class="flow"><div class="step"><i class="k" style="font-style:normal">1</i><b>도구 꺼내기</b><span>import</span></div><div class="step"><i class="k" style="font-style:normal">2</i><b>파일 읽기</b><span>df</span></div><div class="step"><i class="k" style="font-style:normal">3</i><b>분포 보기</b><span>그래프</span></div><div class="step"><i class="k" style="font-style:normal">4</i><b>관계 보기</b><span>그래프</span></div></div></div><div class="lane"><b>전처리<small>문항 5~9</small></b><div class="flow"><div class="step"><i class="k" style="font-style:normal">5</i><b>이상치 지우기</b><span>df_temp</span></div><div class="step"><i class="k" style="font-style:normal">6</i><b>빈칸 처리</b><span>df_na</span></div><div class="step"><i class="k" style="font-style:normal">7</i><b>글자를 숫자로</b><span>df_preset</span></div><div class="step"><i class="k" style="font-style:normal">8</i><b>나누기</b><span>X_train, X_valid</span></div><div class="step"><i class="k" style="font-style:normal">9</i><b>눈금 맞추기</b><span>스케일링</span></div></div></div><div class="lane"><b>AI 모델링<small>문항 10~14</small></b><div class="flow"><div class="step"><i class="k" style="font-style:normal">10</i><b>머신러닝 학습</b><span>dt, rf</span></div><div class="step"><i class="k" style="font-style:normal">11</i><b>중요한 열 찾기</b><span>막대 그래프</span></div><div class="step"><i class="k" style="font-style:normal">12</i><b>성적 매기기</b><span>지표</span></div><div class="step"><i class="k" style="font-style:normal">13</i><b>딥러닝 학습</b><span>model, history</span></div><div class="step"><i class="k" style="font-style:normal">14</i><b>학습 곡선</b><span>그래프</span></div></div></div></div><figcaption>상자 아래 작은 글씨는 그 문항이 만들어 다음 문항에 넘기는 변수입니다. 이름이 한 글자라도 다르면 다음 문항이 그 변수를 찾지 못합니다.</figcaption></figure>
 
-<h3>샘플 문항 두 세트를 나란히 놓으면</h3>
+<h3>코드를 읽는 일곱 가지 약속</h3>
+  <p>시험의 코드는 길어 보여도 같은 기호 몇 개의 반복입니다. 아래 일곱 가지만 알면 처음 보는 줄도 소리 내어 읽을 수 있습니다. 이 교안의 모든 코드 설명은 이 약속 위에서 이루어집니다.</p>
+  <figure class="dia"><div class="dia-t">기호 일곱 개</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">담기</span><b>이름 = 값</b><p>오른쪽의 것을 왼쪽 이름이 붙은 상자에 <b>담는다</b>. 수학의 "같다"가 아닙니다. 이렇게 이름을 붙인 상자를 <b>변수</b>라고 합니다.</p></div><div class="card"><span class="k">시키기</span><b>점 .</b><p>"~에게 시킨다" 또는 "~의". <code>df.head()</code>는 df에게 head를 시킨다는 뜻입니다.</p></div><div class="card"><span class="k">실행</span><b>소괄호 ( )</b><p>"실행하라". 괄호 안에는 주문 사항을 적습니다. <code>head(4)</code>는 "앞부분을, 4줄만".</p></div><div class="card"><span class="k">고르기 · 묶기</span><b>대괄호 [ ]</b><p>"골라낸다". <code>df[&#39;label&#39;]</code>은 df에서 label 열을 골라낸다는 뜻입니다. 여러 개를 묶을 때도 씁니다.</p></div><div class="card"><span class="k">글자</span><b>따옴표 &#39; &#39;</b><p>글자 그대로. 따옴표가 없으면 변수 이름이고, 있으면 그냥 글자입니다. 열 이름과 파일 이름은 따옴표 안에 씁니다.</p></div><div class="card"><span class="k">주문 항목</span><b>이름=값 (괄호 안)</b><p>주문 사항에 이름표를 붙인 것. <code>test_size=0.3</code>은 "test_size 항목은 0.3으로". 이 주문 사항을 <b>인자</b>라고 합니다.</p></div><div class="card"><span class="k">메모</span><b># 뒤의 글</b><p>사람이 읽으라고 적은 메모. 컴퓨터는 읽지 않습니다. <b>주석</b>이라고 합니다.</p></div></div></div><figcaption>예를 들어 <code>data = pd.read_csv('./wine.csv')</code>는 "pd에게 read_csv를 시키되 주문은 './wine.csv'라는 파일 이름, 그 결과를 data라는 상자에 담는다"로 읽습니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">노트북에서 쓰는 말</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">칸</span><b>셀 (cell)</b><p>코드를 적는 칸 하나. 시험지는 이런 칸이 위에서 아래로 이어진 문서입니다.</p></div><div class="card"><span class="k">시키기</span><b>실행</b><p>칸에 적은 코드를 컴퓨터에게 시키는 것. Shift + Enter를 누릅니다.</p></div><div class="card"><span class="k">결과</span><b>출력</b><p>실행한 결과가 칸 바로 아래에 찍힌 것. 칸의 마지막 줄 결과는 자동으로 찍히고, 그 밖의 것은 <code>print()</code>로 찍습니다.</p></div><div class="card"><span class="k">오류</span><b>에러</b><p>컴퓨터가 이해하지 못했을 때 내는 빨간 글. 맨 아랫줄에 이유가 적혀 있습니다.</p></div></div></div><figcaption>위 칸에서 만든 변수는 아래 칸에서 그대로 쓸 수 있습니다. 그래서 칸을 위에서부터 순서대로 실행해야 합니다.</figcaption></figure>
+
+  <h3>샘플 문항 두 세트를 나란히 놓으면</h3>
   <p>제공된 샘플은 분류(와인 품질등급 Pass/Fail 예측)와 회귀(내비게이션 실주행시간 예측) 두 세트입니다. 문항 번호별로 하는 일이 거의 같고, 바뀌는 것은 모델 이름과 평가 지표, 딥러닝 출력층뿐입니다.</p>
   <div class="tbl"><table>
     <thead><tr><th class="n">문항</th><th>하는 일</th><th>분류 샘플</th><th>회귀 샘플</th></tr></thead>
@@ -371,6 +385,13 @@ h2,h3,section.part,header,.jump{scroll-margin-top:calc(16px + env(safe-area-inse
       <tr><td>tensorflow</td><td>딥러닝</td><td><code>import tensorflow as tf</code></td></tr>
     </tbody>
   </table></div>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>import pandas as pd</code></td><td>pandas라는 공구 상자를 꺼내 오고(import), 앞으로는 pd라는 짧은 별명으로(as) 부른다</td></tr>
+    <tr><td><code>import matplotlib.pyplot as plt</code></td><td>matplotlib 상자 안의 pyplot이라는 칸을 꺼내 plt라고 부른다. 점은 "~ 안의"</td></tr>
+    <tr><td><code>from sklearn.tree import DecisionTreeClassifier</code></td><td>sklearn 상자의 tree 칸에서(from) DecisionTreeClassifier라는 공구 하나만 꺼낸다. 이렇게 꺼낸 것은 앞에 상자 이름 없이 바로 쓴다</td></tr>
+    <tr><td><code>!pip install xgboost</code></td><td>느낌표는 "파이썬 코드가 아니라 컴퓨터에 내리는 명령"이라는 표시. pip는 공구 상자를 내려받아 설치해 주는 프로그램</td></tr>
+  </tbody></table></div>
   <div class="note"><div class="ic">!</div><p><b>설치 이름과 불러오는 이름이 다릅니다.</b> 설치는 <code>!pip install scikit-learn</code>, 불러오기는 <code>import sklearn</code>입니다. 노트북 셀에서 설치할 때는 맨 앞에 느낌표를 붙입니다. 통째로 부르는 것(<code>import A as B</code>)과 일부만 꺼내는 것(<code>from A import B</code>)도 구분합니다.</p></div>
 
   <h3><span class="q">문항 2 · 데이터 구성 및 특성 파악</span>파일을 열고 지도를 그린다</h3>
@@ -379,6 +400,25 @@ h2,h3,section.part,header,.jump{scroll-margin-top:calc(16px + env(safe-area-inse
   <figure class="dia"><div class="dia-t">궁금한 것과 물어볼 함수</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">크기</span><b>몇 행 몇 열인가</b><p><code>df.shape</code></p></div><div class="card"><span class="k">미리 보기</span><b>앞부분은 어떻게 생겼나</b><p><code>df.head()</code></p></div><div class="card"><span class="k">구조</span><b>열마다 자료형과 빈칸은</b><p><code>df.info()</code></p></div><div class="card"><span class="k">요약</span><b>숫자 열의 평균, 최대, 최소는</b><p><code>df.describe()</code></p></div><div class="card"><span class="k">개수</span><b>범주마다 몇 건인가</b><p><code>df[열].value_counts()</code></p></div><div class="card"><span class="k">묶어 보기</span><b>범주별 평균은</b><p><code>df.groupby(열)[열].mean()</code></p></div></div></div></figure>
 
   <p>몇 행 몇 열인지, 열 종류가 숫자인지 글자인지, 값이 어떻게 퍼져 있는지를 봅니다. 시험은 이 확인을 함수 하나씩으로 묻습니다.</p>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>pd.read_csv()</code></td><td>read = 읽다. csv = 쉼표로 칸을 나눈 표 파일</td><td>파일을 읽어 데이터프레임으로 만든다</td></tr>
+    <tr><td><code>head() / tail()</code></td><td>머리 / 꼬리</td><td>표의 앞 5줄 / 뒤 5줄을 보여 준다. 괄호에 숫자를 넣으면 그만큼</td></tr>
+    <tr><td><code>shape</code></td><td>모양</td><td>(행 수, 열 수). 이미 적혀 있는 값이라 괄호가 없다</td></tr>
+    <tr><td><code>columns</code></td><td>열들</td><td>열 이름 목록</td></tr>
+    <tr><td><code>info()</code></td><td>정보</td><td>열마다 자료형과, 비어 있지 않은 값이 몇 개인지</td></tr>
+    <tr><td><code>describe()</code></td><td>묘사하다</td><td>숫자 열의 개수, 평균, 최소, 최대, 4등분 지점</td></tr>
+    <tr><td><code>value_counts()</code></td><td>값 세기</td><td>어떤 값이 몇 번 나오는지</td></tr>
+    <tr><td><code>unique() / nunique()</code></td><td>유일한 / 유일한 것의 수</td><td>어떤 값들이 있는지 / 몇 종류인지</td></tr>
+    <tr><td><code>groupby()</code></td><td>~별로 묶기</td><td>같은 값끼리 묶어서 묶음마다 계산한다</td></tr>
+  </tbody></table></div>
+  <figure class="dia"><div class="dia-t">자료형 읽는 법 · info()의 Dtype 칸</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">글자</span><b>object</b><p>글자. 예: low, run. 모델에 넣으려면 숫자로 바꿔야 한다.</p></div><div class="card"><span class="k">정수</span><b>int64</b><p>소수점 없는 숫자. 예: 0, 1, 42.</p></div><div class="card"><span class="k">소수</span><b>float64</b><p>소수점 있는 숫자. 예: 27.33. 빈칸이 있는 숫자 열도 이렇게 찍힌다.</p></div><div class="card"><span class="k">참 · 거짓</span><b>bool</b><p>True 아니면 False. 계산할 때는 1과 0으로 센다.</p></div></div></div><figcaption>뒤의 64는 숫자를 저장하는 칸의 크기입니다. 시험에서는 신경 쓰지 않아도 됩니다.</figcaption></figure>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>df['op_state'].value_counts()</code></td><td>df에서 op_state 열을 골라, 값마다 몇 번 나오는지 세어라</td></tr>
+    <tr><td><code>df.groupby('op_state')['flow_m3h'].mean()</code></td><td>df를 op_state 값이 같은 것끼리 묶고, 묶음마다 flow_m3h 열을 골라, 평균을 내라</td></tr>
+    <tr><td><code>df.shape</code></td><td>df의 모양(행 수, 열 수)을 알려 달라. 계산을 시키는 것이 아니라 적힌 값을 읽는 것이라 괄호가 없다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>A-1</b><span>읽고 훑는 함수 한 벌 (펌프 데이터로 연습)</span></div>
   <pre><code>import pandas as pd
@@ -461,6 +501,15 @@ run    141.323442</pre>
       <tr><td>상관</td><td><code>df.corr(numeric_only=True)</code></td><td>숫자 열끼리의 상관계수 행렬</td></tr>
     </tbody>
   </table></div>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>isnull() / isna()</code></td><td>is null? = 비어 있는가</td><td>칸마다 비었으면 True, 아니면 False. 둘은 같은 함수</td></tr>
+    <tr><td><code>sum()</code></td><td>더하기</td><td>세로로 더한다. True는 1로 세므로 빈칸의 개수가 된다</td></tr>
+    <tr><td><code>duplicated()</code></td><td>중복된</td><td>앞에 똑같은 행이 이미 있으면 True</td></tr>
+    <tr><td><code>drop_duplicates()</code></td><td>중복을 떨어뜨리다</td><td>똑같은 행은 하나만 남긴다</td></tr>
+    <tr><td><code>corr()</code></td><td>correlation = 상관</td><td>숫자 열끼리 함께 움직이는 정도를 -1에서 1 사이로</td></tr>
+  </tbody></table></div>
+  <figure class="dia"><div class="dia-t">상관계수 읽는 법</div><div class="dia-b"><div class="cards"><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><circle cx="16" cy="58" r="2.5" fill="var(--accent)"/><circle cx="28" cy="50" r="2.5" fill="var(--accent)"/><circle cx="40" cy="44" r="2.5" fill="var(--accent)"/><circle cx="52" cy="36" r="2.5" fill="var(--accent)"/><circle cx="64" cy="30" r="2.5" fill="var(--accent)"/><circle cx="76" cy="22" r="2.5" fill="var(--accent)"/><circle cx="90" cy="16" r="2.5" fill="var(--accent)"/><circle cx="104" cy="10" r="2.5" fill="var(--accent)"/></svg><span class="k">+</span><b>1에 가깝다</b><p>한쪽이 커지면 다른 쪽도 커진다. 예: 키와 신발 크기.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><circle cx="16" cy="10" r="2.5" fill="var(--accent)"/><circle cx="28" cy="18" r="2.5" fill="var(--accent)"/><circle cx="40" cy="24" r="2.5" fill="var(--accent)"/><circle cx="52" cy="34" r="2.5" fill="var(--accent)"/><circle cx="64" cy="38" r="2.5" fill="var(--accent)"/><circle cx="76" cy="48" r="2.5" fill="var(--accent)"/><circle cx="90" cy="52" r="2.5" fill="var(--accent)"/><circle cx="104" cy="60" r="2.5" fill="var(--accent)"/></svg><span class="k">−</span><b>-1에 가깝다</b><p>한쪽이 커지면 다른 쪽은 작아진다. 예: 속도와 걸리는 시간.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><circle cx="16" cy="30" r="2.5" fill="var(--accent)"/><circle cx="28" cy="54" r="2.5" fill="var(--accent)"/><circle cx="40" cy="14" r="2.5" fill="var(--accent)"/><circle cx="52" cy="44" r="2.5" fill="var(--accent)"/><circle cx="64" cy="20" r="2.5" fill="var(--accent)"/><circle cx="76" cy="58" r="2.5" fill="var(--accent)"/><circle cx="90" cy="26" r="2.5" fill="var(--accent)"/><circle cx="104" cy="46" r="2.5" fill="var(--accent)"/></svg><span class="k">0</span><b>0에 가깝다</b><p>서로 상관없이 움직인다.</p></div></div></div><figcaption>heatmap은 이 숫자를 모든 열 쌍에 대해 구한 표를 색으로 칠한 그림입니다.</figcaption></figure>
 <div class="code">
   <div class="cap"><b>A-1b</b><span>결측과 중복을 센다</span></div>
   <pre><code>df.isnull().sum()
@@ -505,6 +554,24 @@ event_type         54871
       <tr><td>여러 숫자 열을 한꺼번에</td><td><code>pairplot</code></td><td>데이터프레임</td><td>센서 전체 훑기</td></tr>
     </tbody>
   </table></div>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>sns / plt</code></td><td>seaborn / pyplot의 별명</td><td>sns는 통계 그래프를 그리는 도구, plt는 그림판을 다루는 도구</td></tr>
+    <tr><td><code>data=</code></td><td>자료</td><td>어느 표에서 그릴지</td></tr>
+    <tr><td><code>x= / y=</code></td><td>가로축 / 세로축</td><td>가로축과 세로축에 놓을 열 이름</td></tr>
+    <tr><td><code>hue=</code></td><td>색조</td><td>이 열의 값마다 색을 달리해서 나눠 그린다</td></tr>
+    <tr><td><code>ax=</code></td><td>axes = 칸</td><td>여러 칸 가운데 몇 번째 칸에 그릴지</td></tr>
+    <tr><td><code>figsize=(15, 6)</code></td><td>figure size = 그림 크기</td><td>그림판의 (가로, 세로) 크기</td></tr>
+    <tr><td><code>set_title() / plt.title()</code></td><td>제목 붙이기</td><td>칸에 제목 / 그림이 하나일 때 제목</td></tr>
+    <tr><td><code>annot=True</code></td><td>annotate = 주석을 달다</td><td>heatmap의 칸마다 숫자를 적는다</td></tr>
+    <tr><td><code>plt.show()</code></td><td>보여 주다</td><td>완성된 그림을 화면에 내보낸다</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>sns.countplot(data=df, x='op_state', ax=axes[0])</code></td><td>sns에게 개수 막대 그래프를 시킨다. 표는 df, 가로축은 op_state 열, 그릴 자리는 0번 칸</td></tr>
+    <tr><td><code>sns.histplot(data=df, x='vib_rms_mms', hue='label', ax=axes[1])</code></td><td>분포 그래프를 시킨다. 가로축은 진동 열, label 값(0과 1)마다 색을 달리하고, 1번 칸에 그린다</td></tr>
+    <tr><td><code>axes[0].set_title('State Count')</code></td><td>0번 칸에게 제목을 'State Count'로 붙이라고 시킨다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>A-2</b><span>그래프 두 개를 나란히 - 분류 샘플 3번의 뼈대</span></div>
   <pre><code>import matplotlib.pyplot as plt
@@ -561,6 +628,8 @@ sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm')</code></pre
 
   <p>이상치를 가리는 기준은 여럿이지만, 시험은 boxplot과 짝을 이루는 <b>IQR 방식</b>을 묻습니다. 가운데 50%가 들어 있는 상자의 높이(IQR = Q3 - Q1)를 재고, 상자 끝에서 그 1.5배만큼 떨어진 곳에 울타리를 칩니다.</p>
 
+  <p>기준을 정하는 데 필요한 말이 <b>사분위수</b>입니다. 값을 작은 것부터 줄 세운 뒤 네 등분했을 때, 등분하는 자리에 있는 값입니다. 아래에서 4분의 1 지점이 Q1, 4분의 3 지점이 Q3입니다. Q1과 Q3 사이에는 전체의 가운데 절반이 들어 있고, 그 폭을 IQR이라고 부릅니다. "보통의 값들이 퍼져 있는 폭"입니다.</p>
+  <figure class="dia"><div class="dia-t">줄 세워 네 등분하기 (연습용 예시 값)</div><div class="dia-b"><svg viewBox="0 0 680 150" role="img" aria-label="아홉 개의 값을 줄 세워 네 등분한 지점"><line x1="40" y1="70" x2="650" y2="70" stroke="var(--line)"/><circle cx="60" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="60" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">2</text><circle cx="130" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="130" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">3</text><circle cx="200" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="200" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">4</text><circle cx="270" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="270" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">5</text><circle cx="340" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="340" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">6</text><circle cx="410" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="410" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">7</text><circle cx="480" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="480" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">8</text><circle cx="550" cy="70" r="15" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="550" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">9</text><circle cx="620" cy="70" r="15" fill="var(--warn-soft)" stroke="var(--warn)" stroke-width="1.5"/><text x="620" y="75" font-size="13" font-weight="600" fill="var(--fg)" text-anchor="middle">20</text><line x1="200" y1="92" x2="200" y2="108" stroke="var(--accent)" stroke-width="2"/><text x="200" y="124" font-size="12" fill="var(--accent)" text-anchor="middle">Q1 = 4</text><text x="200" y="140" font-size="11" fill="var(--muted)" text-anchor="middle">아래에서 25%</text><line x1="340" y1="92" x2="340" y2="108" stroke="var(--accent)" stroke-width="2"/><text x="340" y="124" font-size="12" fill="var(--accent)" text-anchor="middle">중앙값 = 6</text><text x="340" y="140" font-size="11" fill="var(--muted)" text-anchor="middle">한가운데</text><line x1="480" y1="92" x2="480" y2="108" stroke="var(--accent)" stroke-width="2"/><text x="480" y="124" font-size="12" fill="var(--accent)" text-anchor="middle">Q3 = 8</text><text x="480" y="140" font-size="11" fill="var(--muted)" text-anchor="middle">아래에서 75%</text><text x="620" y="40" font-size="12" fill="var(--warn)" text-anchor="middle">혼자 먼 값</text><path d="M200 30 L480 30" stroke="var(--accent)" stroke-width="1.5"/><text x="340" y="22" font-size="12" fill="var(--accent)" text-anchor="middle">가운데 절반의 폭 IQR = 8 - 4 = 4</text></svg></div><figcaption>가운데 절반의 폭이 4입니다. 이 폭의 1.5배(6)만큼을 Q1 아래와 Q3 위로 더 허용합니다. 4 - 6 = -2부터 8 + 6 = 14까지가 정상 범위이고, 20은 그 밖이라 이상치입니다. 이 허용선을 울타리(fence)라고 부릅니다.</figcaption></figure>
   <figure class="fig">
     <svg viewBox="0 0 720 190" role="img" aria-label="상자 그림에서 Q1, Q3, IQR과 위아래 울타리의 위치">
       <line x1="40" y1="100" x2="690" y2="100" stroke="var(--line)"/>
@@ -595,6 +664,24 @@ sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm')</code></pre
     <p class="res">평균과 표준편차 대신 사분위수를 쓰기 때문에, 이상치 자신이 기준선을 끌어당기지 못합니다.</p>
   </div>
 
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>quantile(0.25)</code></td><td>quantile = 분위수</td><td>줄 세웠을 때 아래에서 25% 지점의 값. 0.75면 75% 지점</td></tr>
+    <tr><td><code>drop()</code></td><td>떨어뜨리다</td><td>행이나 열을 지운다</td></tr>
+    <tr><td><code>index</code></td><td>색인</td><td>행에 붙은 번호. 지울 행을 이 번호로 지정한다</td></tr>
+    <tr><td><code>axis=0 / axis=1</code></td><td>축</td><td>0은 행, 1은 열</td></tr>
+    <tr><td><code>reset_index(drop=True)</code></td><td>번호 다시 매기기</td><td>행을 지워 듬성듬성해진 번호를 0부터 새로 붙인다. drop=True는 옛 번호를 버리라는 뜻</td></tr>
+    <tr><td><code>inplace=True</code></td><td>제자리에서</td><td>새 표를 돌려주지 않고 원래 표를 바로 고친다</td></tr>
+    <tr><td><code>| / &amp;</code></td><td>또는 / 그리고</td><td>조건 두 개를 잇는다. 조건마다 괄호로 싼다</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>q1 = df['flow_m3h'].quantile(0.25)</code></td><td>유량 열을 골라 25% 지점의 값을 구하고, q1이라는 상자에 담는다</td></tr>
+    <tr><td><code>df['flow_m3h'] &gt; upper_fence</code></td><td>유량이 위 울타리보다 큰가? 행마다 True 또는 False가 나온다</td></tr>
+    <tr><td><code>df[ (조건1) | (조건2) ]</code></td><td>df에서 조건1 또는 조건2가 True인 행만 골라낸다. 여기서는 울타리 밖의 행들</td></tr>
+    <tr><td><code>df.drop(out.index, axis=0)</code></td><td>df에서, out에 담긴 행들의 번호에 해당하는 행을 지운다</td></tr>
+    <tr><td><code>df_temp.drop(columns=['timestamp', ...])</code></td><td>df_temp에서 대괄호 안에 적은 이름의 열들을 지운다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>B-1</b><span>이상치 행을 지우는 두 가지 쓰기</span></div>
   <pre><code>q1 = df['flow_m3h'].quantile(0.25)
@@ -651,6 +738,22 @@ lower_fence 5.295 · upper_fence 243.655
       <tr><td>앞값 / 보간</td><td><code>df['col'].ffill()</code>, <code>.interpolate()</code></td><td>시간 순서가 있는 데이터</td></tr>
     </tbody>
   </table></div>
+  <figure class="dia"><div class="dia-t">평균, 중앙값, 최빈값 · 빈칸을 메울 때 고르는 세 가지 대표값</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">mean()</span><b>평균 21.6</b><p>전부 더해 개수로 나눈 값. (1 + 2 + 2 + 3 + 100) ÷ 5. 100 하나에 크게 끌려갔다.</p></div><div class="card"><span class="k">median()</span><b>중앙값 2</b><p>줄 세웠을 때 한가운데 값. 100이 있어도 흔들리지 않는다.</p></div><div class="card"><span class="k">mode()[0]</span><b>최빈값 2</b><p>가장 자주 나온 값. 글자 열에도 쓸 수 있다.</p></div></div></div><figcaption>값이 1, 2, 2, 3, 100일 때입니다(연습용 예시 값). 튀는 값이 있으면 평균보다 중앙값이 그 열을 더 잘 대표합니다. <code>mode()</code>는 가장 흔한 값이 여럿일 수 있어 목록으로 돌려주므로, 첫 번째 것을 고르는 <code>[0]</code>을 붙입니다.</figcaption></figure>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>NaN</code></td><td>Not a Number = 숫자가 아님</td><td>비어 있는 칸을 나타내는 표시</td></tr>
+    <tr><td><code>dropna()</code></td><td>drop + NA(없음)</td><td>빈칸이 있는 행을 지운다</td></tr>
+    <tr><td><code>fillna(값)</code></td><td>fill = 채우다</td><td>빈칸을 괄호 안의 값으로 채운다</td></tr>
+    <tr><td><code>subset=[...]</code></td><td>부분집합</td><td>이 열들만 보고 판단한다</td></tr>
+    <tr><td><code>ffill()</code></td><td>forward fill = 앞에서 채우기</td><td>바로 윗칸의 값으로 채운다</td></tr>
+    <tr><td><code>interpolate()</code></td><td>사이를 메우다</td><td>앞뒤 값의 중간값으로 채운다</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>df_temp.isnull().sum()</code></td><td>df_temp의 칸마다 비었는지 묻고, 열마다 True의 개수를 더한다</td></tr>
+    <tr><td><code>df_na = df_temp.dropna()</code></td><td>df_temp에서 빈칸이 있는 행을 지운 새 표를 만들어 df_na에 담는다. 원래 df_temp는 그대로다</td></tr>
+    <tr><td><code>df['col'].fillna(df['col'].mean())</code></td><td>col 열의 빈칸을, col 열의 평균으로 채운다. 안쪽 괄호부터 읽는다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>B-1b</b><span>결측을 세고, 지우고, 다시 센다</span></div>
   <pre><code>print('결측치 처리 전\n', df_temp.isnull().sum())
@@ -689,6 +792,25 @@ label                 0
       <tr><td>도구</td><td><code>LabelEncoder</code></td><td><code>pd.get_dummies</code></td></tr>
     </tbody>
   </table></div>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>pd.get_dummies()</code></td><td>dummy = 자리만 표시하는 대역</td><td>범주마다 0/1 표시용 열을 만든다. 원-핫 인코딩</td></tr>
+    <tr><td><code>columns=[...]</code></td><td>열들</td><td>어느 열을 바꿀지</td></tr>
+    <tr><td><code>LabelEncoder</code></td><td>label = 이름표, encode = 부호로 바꾸다</td><td>글자를 번호로 바꿔 주는 도구</td></tr>
+    <tr><td><code>fit_transform()</code></td><td>맞추고 바꾸다</td><td>어떤 글자들이 있는지 살핀 뒤(fit) 번호로 바꾼다(transform)</td></tr>
+    <tr><td><code>classes_</code></td><td>종류들</td><td>몇 번이 어떤 글자였는지 적힌 목록</td></tr>
+    <tr><td><code>isin([...])</code></td><td>is in = 안에 있는가</td><td>값이 목록 안에 있으면 True</td></tr>
+    <tr><td><code>loc[행 조건, 열]</code></td><td>location = 위치</td><td>조건에 맞는 행의, 지정한 열 칸을 가리킨다</td></tr>
+    <tr><td><code>replace({...})</code></td><td>바꾸다</td><td>값을 다른 값으로 바꾼다. {옛 값: 새 값}</td></tr>
+    <tr><td><code>astype(int)</code></td><td>as type = ~형으로</td><td>자료형을 바꾼다</td></tr>
+    <tr><td><code>select_dtypes(include='object')</code></td><td>자료형으로 고르기</td><td>글자 열만 골라낸다</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>pd.get_dummies(data=df_na, columns=['op_state'])</code></td><td>df_na 표에서 op_state 열을, 값의 종류만큼의 0/1 열로 펼쳐라</td></tr>
+    <tr><td><code>data.loc[data['kind'].isin(['a', 'b']), 'kind'] = 'c'</code></td><td>kind 값이 a나 b인 행을 찾아, 그 행의 kind 칸에 c를 담아라</td></tr>
+    <tr><td><code>le = LabelEncoder()</code></td><td>글자를 번호로 바꾸는 도구를 하나 만들어 le라고 부른다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>B-2</b><span>두 인코딩과, 그 앞의 값 정리</span></div>
   <pre><code># 원-핫 인코딩: 대상 열을 columns에 적는다
@@ -750,6 +872,21 @@ dtypes: bool(2), float64(7), int64(1)
 
   <p>모델이 본 적 없는 데이터에서 얼마나 맞히는지를 보려면, 일부를 떼어 두고 학습에 쓰지 않아야 합니다. 먼저 정답 열 y와 나머지 X를 가르고, 그다음 행을 나눕니다.</p>
   <figure class="dia"><div class="dia-t">변수 이름 읽는 법 · 글자 둘을 이어 붙인 이름입니다</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">앞 글자</span><b>X = 문제</b><p>답을 뺀 나머지 열 전부. 모델이 보고 판단하는 재료입니다. 열이 여럿이라 대문자로 씁니다.</p></div><div class="card"><span class="k">앞 글자</span><b>y = 정답</b><p>맞혀야 할 열 하나. 연습 데이터에서는 label 열입니다. 열이 하나라 소문자로 씁니다.</p></div><div class="card"><span class="k">뒷말</span><b>train = 공부용</b><p>train은 "훈련하다"입니다. 모델이 규칙을 찾을 때 보는 쪽.</p></div><div class="card"><span class="k">뒷말</span><b>valid = 확인용</b><p>validation(검증)의 줄임. 공부가 끝난 뒤 실력을 재는 쪽. test라고 부르기도 합니다.</p></div></div><div class="mtw"><table class="mt"><tr><th class=""></th><th class="hl">문제 (X)</th><th class="hl">정답 (y)</th></tr><tr><td class=""><b>공부용 (train)</b> · 44,020행</td><td class="hl">X_train · 공부할 때 보는 문제</td><td class="hl">y_train · 공부할 때 맞춰 보는 정답</td></tr><tr><td class=""><b>확인용 (valid)</b> · 18,866행</td><td class="hl">X_valid · 실력 확인용 문제</td><td class="hl">y_valid · 실력 확인용 정답</td></tr></table></div></div><figcaption>네 개의 이름은 이 표의 네 칸입니다. <code>X_train</code>은 "공부용 문제지", <code>y_valid</code>는 "확인용 정답지"로 읽으면 됩니다. 이후 문항에서 이 네 이름이 계속 나옵니다.</figcaption></figure>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>train_test_split</code></td><td>train(훈련) + test(시험) + split(나누다)</td><td>표를 훈련용과 검증용으로 나눈다</td></tr>
+    <tr><td><code>test_size=0.3</code></td><td>시험용의 크기</td><td>검증용으로 떼어 둘 비율. 0.3이면 30%</td></tr>
+    <tr><td><code>random_state=7</code></td><td>무작위의 상태</td><td>행을 섞는 방법에 붙인 번호. 같은 번호면 누가 언제 실행해도 똑같이 섞인다. 채점이 가능한 이유</td></tr>
+    <tr><td><code>stratify=y</code></td><td>stratum = 층</td><td>정답의 비율이 양쪽에서 같아지도록 층을 나눠 뽑는다</td></tr>
+    <tr><td><code>drop('label', axis=1)</code></td><td>label 열을 떨어뜨리다</td><td>정답 열을 뺀 나머지, 즉 X를 만든다</td></tr>
+  </tbody></table></div>
+  <figure class="dia"><div class="dia-t">stratify=y가 지켜 주는 것 · 연습 데이터의 실제 비율</div><div class="dia-b"><div class="lane"><b>전체<small>62,886행</small></b><div class="split"><div class="a" style="width:86%">정상</div><div class="b" style="width:14%">이상 2.21%</div></div></div><div class="lane"><b>훈련<small>44,020행</small></b><div class="split"><div class="a" style="width:86%">정상</div><div class="b" style="width:14%">이상 2.21%</div></div></div><div class="lane"><b>검증<small>18,866행</small></b><div class="split"><div class="a" style="width:86%">정상</div><div class="b" style="width:14%">이상 2.21%</div></div></div></div><figcaption>카드를 섞어 두 더미로 나누면 한쪽에 특정 무늬가 몰릴 수 있습니다. stratify는 무늬별로 따로 섞어 같은 비율로 나눠 줍니다. 막대의 주황 칸은 보이도록 실제보다 넓게 그렸습니다.</figcaption></figure>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>X = df_preset.drop('label', axis=1)</code></td><td>df_preset에서 label 열을 지운 나머지를 X(문제)에 담는다</td></tr>
+    <tr><td><code>y = df_preset['label']</code></td><td>df_preset에서 label 열만 골라 y(정답)에 담는다</td></tr>
+    <tr><td><code>X_train, X_valid, y_train, y_valid = train_test_split(X, y, ...)</code></td><td>X와 y를 같은 방식으로 나눠, 결과 네 개를 왼쪽의 네 상자에 순서대로 담는다. 쉼표로 이은 이름은 "차례로 하나씩 받는다"는 뜻</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>B-3</b><span>X와 y를 가르고 훈련과 검증으로 나눈다</span></div>
   <pre><code>from sklearn.model_selection import train_test_split
@@ -957,6 +1094,21 @@ round(np.max(X_valid))                # 결과값을 묻는 문항이 뒤따른�
       <tr><td>XGBoost / LightGBM</td><td><code>xgboost</code>, <code>lightgbm</code></td><td>부스팅의 빠른 구현. <code>XGBClassifier</code>, <code>LGBMClassifier</code></td></tr>
     </tbody>
   </table></div>
+  <h4 class="sub">머신러닝 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>DecisionTree</code></td><td>결정 나무</td><td>질문을 거듭해 가르는 모델</td></tr>
+    <tr><td><code>RandomForest</code></td><td>무작위 숲</td><td>조금씩 다른 나무 여러 그루의 투표</td></tr>
+    <tr><td><code>Classifier / Regressor</code></td><td>분류기 / 회귀기</td><td>이름 끝이 Classifier면 분류용, Regressor면 회귀용</td></tr>
+    <tr><td><code>fit(X_train, y_train)</code></td><td>fit = 맞추다</td><td>문제와 정답을 주고 규칙을 찾게 한다. 이것이 학습</td></tr>
+    <tr><td><code>predict(X_valid)</code></td><td>예측하다</td><td>문제만 주고 답을 쓰게 한다</td></tr>
+    <tr><td><code>random_state</code></td><td>무작위의 상태</td><td>모델 안의 무작위 요소를 고정한다. 지시된 숫자를 그대로</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">세 줄을 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>dt = DecisionTreeClassifier(max_depth=5, random_state=120)</code></td><td>질문을 5층까지만 하는 분류용 나무 모델을 하나 만들어 dt라고 부른다. 아직 아무것도 배우지 않은 빈 모델이다</td></tr>
+    <tr><td><code>dt.fit(X_train, y_train)</code></td><td>dt에게 공부용 문제지와 정답지를 주고 학습시킨다</td></tr>
+    <tr><td><code>y_pred = dt.predict(X_valid)</code></td><td>dt에게 확인용 문제지를 주고 답을 쓰게 해, 그 답안을 y_pred에 담는다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-0</b><span>모델이 바뀌어도 세 줄은 같다 - 부스팅 모델</span></div>
   <pre><code># 없으면 설치: !pip install xgboost lightgbm
@@ -983,6 +1135,18 @@ y_pred_lgbm = lgbm.predict(X_valid)</code></pre>
       <tr><td>학습률</td><td><code>learning_rate</code></td><td>부스팅에서 한 걸음의 크기</td></tr>
     </tbody>
   </table></div>
+  <h4 class="sub">GridSearchCV에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>GridSearchCV</code></td><td>Grid(격자) + Search(탐색) + CV(교차검증)</td><td>후보 값의 모든 조합을 격자처럼 늘어놓고 하나씩 시험해 본다</td></tr>
+    <tr><td><code>estimator=</code></td><td>추정기</td><td>시험해 볼 모델</td></tr>
+    <tr><td><code>param_grid=</code></td><td>parameter grid = 설정값 격자</td><td>{설정 이름: [후보 값들]} 모양의 후보 목록</td></tr>
+    <tr><td><code>cv=3</code></td><td>cross validation</td><td>훈련 데이터를 3조각으로 나눠 3번 채점한다</td></tr>
+    <tr><td><code>scoring='accuracy'</code></td><td>채점 방식</td><td>무엇으로 점수를 매길지</td></tr>
+    <tr><td><code>n_jobs=-1</code></td><td>일꾼의 수</td><td>-1은 "컴퓨터의 계산 장치를 전부 써라"</td></tr>
+    <tr><td><code>best_params_</code></td><td>가장 좋은 설정값</td><td>1등 한 조합</td></tr>
+    <tr><td><code>best_estimator_</code></td><td>가장 좋은 모델</td><td>1등 조합으로 다시 학습해 둔 모델. 이후의 예측은 이것으로 한다</td></tr>
+    <tr><td><code>이름 끝의 밑줄 _</code></td><td></td><td>"학습을 마쳐야 생기는 값"이라는 표시. fit 전에는 없다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-1</b><span>값을 직접 주는 경우와 GridSearchCV로 찾는 경우</span></div>
   <pre><code>from sklearn.tree import DecisionTreeClassifier
@@ -1041,6 +1205,20 @@ RandomForestClassifier(max_depth=20, random_state=7)
   <figure class="dia"><div class="dia-t">연습 데이터에서 실제로 나온 변수중요도</div><div class="dia-b"><div class="bars"><div class="bar-row"><span>brg_temp_c</span><span class="tr"><i class="" style="width:100.0%"></i></span><span>0.456</span></div><div class="bar-row"><span>suc_press_bar</span><span class="tr"><i class="" style="width:52.3%"></i></span><span>0.238</span></div><div class="bar-row"><span>vib_rms_mms</span><span class="tr"><i class="" style="width:28.3%"></i></span><span>0.129</span></div><div class="bar-row"><span>motor_current_a</span><span class="tr"><i class="" style="width:10.7%"></i></span><span>0.049</span></div><div class="bar-row"><span>rpm</span><span class="tr"><i class="" style="width:9.3%"></i></span><span>0.042</span></div><div class="bar-row"><span>flow_m3h</span><span class="tr"><i class="" style="width:9.2%"></i></span><span>0.042</span></div><div class="bar-row"><span>dis_press_bar</span><span class="tr"><i class="" style="width:9.0%"></i></span><span>0.041</span></div><div class="bar-row"><span>op_state_run</span><span class="tr"><i class="" style="width:1.5%"></i></span><span>0.002</span></div><div class="bar-row"><span>op_state_low</span><span class="tr"><i class="" style="width:1.5%"></i></span><span>0.000</span></div></div></div><figcaption>아래 C-2 코드가 그리는 막대 그래프와 같은 값입니다. 전부 더하면 1입니다.</figcaption></figure>
 
   <p>트리 계열 모델은 학습하면서 어떤 열로 얼마나 잘 갈랐는지를 기록합니다. 그 값이 <code>feature_importances_</code>이고 전부 더하면 1입니다.</p>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>feature_importances_</code></td><td>feature(특성 = 열) + importance(중요도)</td><td>열마다 매겨진 중요도. 끝의 밑줄은 학습 뒤에 생긴다는 표시</td></tr>
+    <tr><td><code>pd.DataFrame({...})</code></td><td>표 만들기</td><td>{열 이름: 값들} 모양으로 새 표를 만든다</td></tr>
+    <tr><td><code>sort_values()</code></td><td>값으로 정렬</td><td>지정한 열의 값 순서로 행을 다시 줄 세운다</td></tr>
+    <tr><td><code>ascending=False</code></td><td>오름차순이 아니다</td><td>큰 것부터. 생략하면 작은 것부터</td></tr>
+    <tr><td><code>[:10]</code></td><td></td><td>앞에서부터 10개만 골라낸다</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>pd.DataFrame({'feature': X.columns, 'importance': ...})</code></td><td>열 이름을 feature 칸에, 중요도를 importance 칸에 나란히 놓은 표를 만든다</td></tr>
+    <tr><td><code>fi.sort_values('importance', ascending=False)[:10]</code></td><td>importance가 큰 순서로 줄 세우고, 위에서 10줄만 남긴다</td></tr>
+    <tr><td><code>sns.barplot(x='importance', y='feature', data=fi)</code></td><td>fi 표로 막대 그래프를 그린다. 막대 길이는 중요도, 세로축은 열 이름</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-2</b><span>중요도와 열 이름을 묶어 상위 10개를 그린다</span></div>
   <pre><code>best_rf = gs_rf.best_estimator_
@@ -1075,6 +1253,19 @@ print(fi)</code></pre>
   <div class="plain"><b>화재경보기에 빗대면</b><p>경보기가 틀리는 방식은 둘입니다. 불이 났는데 안 울리는 것(놓침)과 불이 없는데 울리는 것(헛짚음). 둘은 피해가 전혀 다릅니다. 분류 모델의 성적표도 "몇 개 맞혔나" 하나로 끝나지 않고, 어느 쪽으로 틀렸는지를 나눠서 봅니다. 그 표가 <b>혼동 행렬</b>입니다.</p></div>
   <figure class="dia"><div class="dia-t">혼동 행렬 읽는 법 · 연습 데이터의 RandomForest 결과</div><div class="dia-b"><div class="cm"><div></div><div class="h">모델이 정상이라 함</div><div class="h">모델이 이상이라 함</div><div class="h">실제 정상</div><div class="c ok"><b>18,448</b>맞음 (TN)</div><div class="c no"><b>1</b>헛짚음 (FP)</div><div class="h">실제 이상</div><div class="c no"><b>21</b>놓침 (FN)</div><div class="c ok"><b>396</b>맞음 (TP)</div></div></div><figcaption>초록 칸이 맞힌 것, 주황 칸이 틀린 것입니다. <b>재현율</b>은 아래 줄만 봅니다. 실제 이상 417건 가운데 396건을 잡았으니 0.950입니다. <b>정밀도</b>는 오른쪽 칸만 봅니다. 이상이라고 한 397건 가운데 396건이 진짜였으니 0.997입니다.</figcaption></figure>
 
+  <figure class="dia"><div class="dia-t">네 칸의 이름 읽는 법 · 글자 둘을 이어 붙인 이름입니다</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">맞았나</span><b>첫 글자 T / F</b><p>True = 모델이 <b>맞혔다</b>. False = 모델이 <b>틀렸다</b>.</p></div><div class="card"><span class="k">뭐라고 했나</span><b>둘째 글자 P / N</b><p>Positive = 모델이 "<b>해당한다</b>(이상)"고 했다. Negative = "해당 안 한다(정상)"고 했다.</p></div><div class="card"><span class="k">맞힌 두 칸</span><b>TP · TN</b><p>이상이라 했고 맞음 · 정상이라 했고 맞음.</p></div><div class="card"><span class="k">틀린 두 칸</span><b>FP · FN</b><p>이상이라 했는데 틀림(헛짚음) · 정상이라 했는데 틀림(놓침).</p></div></div></div><figcaption>찾으려는 쪽(여기서는 이상, 값 1)을 Positive라고 부릅니다. 좋다는 뜻이 아닙니다. 병원 검사의 "양성"과 같은 쓰임입니다.</figcaption></figure>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>accuracy_score</code></td><td>accuracy = 정확도</td><td>전체 가운데 맞힌 비율</td></tr>
+    <tr><td><code>precision_score</code></td><td>precision = 정밀도</td><td>모델이 "이상"이라 한 것 가운데 진짜 이상의 비율. 헛짚음이 많으면 낮다</td></tr>
+    <tr><td><code>recall_score</code></td><td>recall = 되찾다</td><td>진짜 이상 가운데 모델이 찾아낸 비율. 놓침이 많으면 낮다. 재현율</td></tr>
+    <tr><td><code>f1_score</code></td><td></td><td>정밀도와 재현율을 하나로 묶은 점수. 둘 다 높아야 높다</td></tr>
+    <tr><td><code>confusion_matrix</code></td><td>혼동 행렬</td><td>위의 네 칸을 표로</td></tr>
+    <tr><td><code>classification_report</code></td><td>분류 보고서</td><td>정밀도, 재현율, f1을 한 번에 찍어 준다</td></tr>
+    <tr><td><code>mean_absolute_error</code></td><td>오차의 절댓값의 평균 (MAE)</td><td>평균적으로 얼마나 빗나갔나</td></tr>
+    <tr><td><code>mean_squared_error</code></td><td>오차의 제곱의 평균 (MSE)</td><td>크게 틀린 것에 벌점을 더 준다</td></tr>
+    <tr><td><code>r2_score</code></td><td>R² = 결정계수</td><td>1이면 완벽, 0이면 "늘 평균만 답하는 것"과 같은 수준</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-3</b><span>분류 지표와 회귀 지표</span></div>
   <pre><code># 분류
@@ -1166,6 +1357,16 @@ confusion_matrix - RandomForest      confusion_matrix - DecisionTree
 
   <p>신경망의 가장 작은 단위는 <b>뉴런</b>입니다. 뉴런 하나는 들어온 값마다 가중치를 곱해 더하고, 편향을 더한 뒤, 활성 함수를 한 번 통과시킵니다. 이 뉴런을 나란히 놓은 것이 층이고, 층을 겹겹이 쌓은 것이 신경망입니다. <code>Dense(64)</code>는 뉴런 64개짜리 층 하나입니다.</p>
 
+    <h4 class="sub">딥러닝에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>뉴런</code></td><td>신경 세포</td><td>작은 계산기 하나. 받은 숫자들로 숫자 하나를 만들어 다음으로 넘긴다</td></tr>
+    <tr><td><code>가중치 (weight)</code></td><td>무게</td><td>입력마다 붙은 다이얼. 그 입력을 얼마나 중요하게 볼지. 학습으로 조절된다</td></tr>
+    <tr><td><code>편향 (bias)</code></td><td>치우침</td><td>입력과 상관없이 늘 더해 주는 값. 이것도 학습으로 조절된다</td></tr>
+    <tr><td><code>활성 함수 (activation)</code></td><td>활성화</td><td>계산 결과를 내보내기 전에 한 번 다듬는 규칙</td></tr>
+    <tr><td><code>층 (layer)</code></td><td></td><td>뉴런을 나란히 놓은 한 줄</td></tr>
+    <tr><td><code>손실 (loss)</code></td><td>잃은 것</td><td>모델의 답이 정답에서 얼마나 먼지를 나타내는 점수. 낮을수록 좋다. 학습은 이 점수를 줄이는 일</td></tr>
+    <tr><td><code>옵티마이저 (optimizer)</code></td><td>최적화 도구</td><td>손실을 줄이려면 다이얼을 어느 쪽으로 얼마나 돌릴지 정하는 방법</td></tr>
+  </tbody></table></div>
   <figure class="fig">
     <svg viewBox="0 0 720 180" role="img" aria-label="뉴런 하나의 계산: 입력에 가중치를 곱해 더하고 편향을 더한 뒤 활성 함수를 통과시킨다">
       <defs><marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/></marker></defs>
@@ -1263,6 +1464,39 @@ confusion_matrix - RandomForest      confusion_matrix - DecisionTree
     <figcaption>분류 샘플 13번의 구성입니다. 첫 Dense 층에만 입력 크기를 알려 주고, Dropout은 층 사이에 끼웁니다. 마지막 층의 뉴런 수와 활성 함수는 정답의 모양이 정합니다.</figcaption>
   </figure>
 
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>Sequential</code></td><td>순서대로</td><td>층을 위에서 아래로 차례차례 쌓는 틀</td></tr>
+    <tr><td><code>Dense(128)</code></td><td>dense = 촘촘한</td><td>뉴런 128개짜리 층. 앞 층의 모든 뉴런과 빠짐없이 이어져 있어 붙은 이름</td></tr>
+    <tr><td><code>activation='relu'</code></td><td>활성 함수</td><td>이 층이 쓸 다듬는 규칙</td></tr>
+    <tr><td><code>input_dim= / Input(shape=)</code></td><td>입력의 개수 / 입력의 모양</td><td>한 행에 숫자가 몇 개 들어오는지. 문제지의 열 수</td></tr>
+    <tr><td><code>Dropout(0.3)</code></td><td>drop out = 중간에 빠지다</td><td>학습 때 뉴런의 30%를 무작위로 쉬게 한다</td></tr>
+    <tr><td><code>compile()</code></td><td>엮다</td><td>학습 방법을 정해 모델을 완성한다. 층만 쌓은 상태로는 아직 학습할 수 없다</td></tr>
+    <tr><td><code>optimizer='adam'</code></td><td>최적화 도구</td><td>다이얼을 고쳐 나가는 방법. adam은 가장 널리 쓰는 방법의 이름</td></tr>
+    <tr><td><code>loss='binary_crossentropy'</code></td><td>binary = 둘 중 하나</td><td>둘 중 하나를 맞히는 문제에서, 예측한 확률이 정답과 얼마나 어긋났는지 재는 점수</td></tr>
+    <tr><td><code>'categorical_crossentropy'</code></td><td>categorical = 여러 범주</td><td>셋 이상에서 고르는 문제용. 앞에 sparse_가 붙으면 정답이 0, 1, 2 같은 번호 그대로일 때</td></tr>
+    <tr><td><code>metrics=['accuracy']</code></td><td>측정 지표</td><td>사람이 지켜볼 숫자. 학습에는 영향을 주지 않는다</td></tr>
+    <tr><td><code>epochs=30</code></td><td>epoch = 한 시대</td><td>문제집을 몇 번 되풀이할지</td></tr>
+    <tr><td><code>batch_size=128</code></td><td>한 묶음의 크기</td><td>한 번에 몇 문제씩 풀고 채점할지</td></tr>
+    <tr><td><code>validation_data=</code></td><td>검증용 자료</td><td>에폭이 끝날 때마다 실력을 재 볼 (문제, 정답) 한 쌍</td></tr>
+    <tr><td><code>callbacks=[...]</code></td><td>call back = 불러내다</td><td>학습 도중 에폭마다 불려 나와 일하는 장치들의 목록</td></tr>
+    <tr><td><code>EarlyStopping</code></td><td>일찍 멈추기</td><td>나아지지 않으면 학습을 멈춘다</td></tr>
+    <tr><td><code>monitor='val_loss'</code></td><td>지켜보다</td><td>무엇을 보고 판단할지. val_loss는 검증 데이터의 손실</td></tr>
+    <tr><td><code>patience=14</code></td><td>인내</td><td>몇 에폭을 참고 기다릴지</td></tr>
+    <tr><td><code>to_categorical()</code></td><td>범주형으로</td><td>번호 0, 1을 [1, 0], [0, 1] 같은 원-핫 모양으로 바꾼다</td></tr>
+    <tr><td><code>history</code></td><td>기록</td><td>에폭마다의 점수가 담긴 학습 일지</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">코드를 우리말로 읽으면</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead><tbody>
+    <tr><td><code>model = Sequential([ ... ])</code></td><td>층을 차례로 쌓는 틀을 만들고, 대괄호 안에 적은 층들을 위에서부터 끼워 model이라고 부른다</td></tr>
+    <tr><td><code>Dense(128, activation='relu', input_dim=X_train.shape[1])</code></td><td>뉴런 128개짜리 층. 다듬는 규칙은 relu. 한 행에 들어오는 숫자의 개수는 공부용 문제지의 열 수</td></tr>
+    <tr><td><code>Dense(2, activation='sigmoid')</code></td><td>마지막 층. 뉴런 2개. 답을 0과 1 사이 숫자 두 개로 낸다</td></tr>
+    <tr><td><code>estop = EarlyStopping(monitor='val_loss', patience=14)</code></td><td>검증 손실을 지켜보다가 14에폭 연속으로 나아지지 않으면 멈추는 장치를 만들어 estop이라고 부른다</td></tr>
+    <tr><td><code>model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])</code></td><td>학습 방법을 정한다. 고치는 방법은 adam, 줄일 점수는 binary_crossentropy, 지켜볼 숫자는 정확도</td></tr>
+    <tr><td><code>y_train = le.fit_transform(y_train)</code></td><td>정답지의 글자를 번호로 바꿔 같은 이름에 다시 담는다</td></tr>
+    <tr><td><code>y_train = to_categorical(y_train)</code></td><td>번호를 원-핫 모양으로 펼친다. 출력 뉴런이 2개라서 정답도 두 칸짜리여야 한다</td></tr>
+    <tr><td><code>history = model.fit(X_train, y_train, epochs=30, batch_size=128, validation_data=(X_valid, y_valid), callbacks=[estop])</code></td><td>공부용 문제와 정답으로 학습시킨다. 문제집을 30번, 128문제씩 끊어서. 매 에폭 뒤 확인용으로 실력을 재고, estop 장치를 붙여 둔다. 학습 일지는 history에 담는다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-4</b><span>이진 분류 모델 - 분류 샘플 13번의 뼈대</span></div>
   <pre><code>import tensorflow as tf
@@ -1457,6 +1691,16 @@ print(model2.count_params(), model.count_params())</code></pre>
   <figure class="dia"><div class="dia-t">연습 데이터의 실제 학습 곡선 · C-4 실행의 accuracy</div><div class="dia-b"><svg viewBox="0 0 680 210" role="img" aria-label="accuracy 곡선"><line x1="52" y1="176.0" x2="664" y2="176.0" stroke="var(--line)"/><text x="44" y="180.0" font-size="11" fill="var(--muted)" text-anchor="end">0.975</text><line x1="52" y1="136.0" x2="664" y2="136.0" stroke="var(--line)"/><text x="44" y="140.0" font-size="11" fill="var(--muted)" text-anchor="end">0.981</text><line x1="52" y1="96.0" x2="664" y2="96.0" stroke="var(--line)"/><text x="44" y="100.0" font-size="11" fill="var(--muted)" text-anchor="end">0.988</text><line x1="52" y1="56.0" x2="664" y2="56.0" stroke="var(--line)"/><text x="44" y="60.0" font-size="11" fill="var(--muted)" text-anchor="end">0.994</text><line x1="52" y1="16.0" x2="664" y2="16.0" stroke="var(--line)"/><text x="44" y="20.0" font-size="11" fill="var(--muted)" text-anchor="end">1.000</text><text x="52.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">1</text><text x="157.5" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">6</text><text x="263.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">11</text><text x="368.6" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">16</text><text x="474.1" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">21</text><text x="579.6" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">26</text><text x="664" y="198" font-size="11" fill="var(--muted)" text-anchor="end">epoch</text><polyline fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" points="52.0,168.3 73.1,60.2 94.2,57.0 115.3,55.0 136.4,55.0 157.5,55.0 178.6,54.4 199.7,51.8 220.8,49.9 241.9,48.6 263.0,46.7 284.1,46.1 305.2,45.4 326.3,42.9 347.4,42.2 368.6,40.3 389.7,38.4 410.8,39.0 431.9,38.4 453.0,38.4 474.1,38.4 495.2,36.5 516.3,35.2 537.4,33.9 558.5,36.5 579.6,34.6 600.7,34.6 621.8,35.8 642.9,35.2 664.0,33.3"/><polyline fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linejoin="round" points="52.0,62.7 73.1,51.8 94.2,49.9 115.3,50.6 136.4,50.6 157.5,49.9 178.6,48.0 199.7,48.0 220.8,44.8 241.9,46.1 263.0,42.2 284.1,43.5 305.2,43.5 326.3,41.6 347.4,37.8 368.6,37.8 389.7,35.8 410.8,34.6 431.9,35.2 453.0,35.2 474.1,34.6 495.2,34.6 516.3,35.8 537.4,33.3 558.5,34.6 579.6,32.0 600.7,32.6 621.8,35.2 642.9,32.0 664.0,31.4"/></svg></div><figcaption>초록이 accuracy(훈련), 주황이 val_accuracy(검증)입니다. 첫 에폭에 크게 오른 뒤 둘이 붙어서 천천히 올라갑니다. 위 세 모양 가운데 가운데 것에 해당합니다.</figcaption></figure>
 
   <p><code>model.fit</code>이 돌려준 <code>history</code>에는 에폭마다의 기록이 들어 있습니다. <code>history.history</code>가 사전이고, 키는 compile에서 정한 이름을 따릅니다. loss와 val_loss는 항상 있고, <code>metrics=['accuracy']</code>면 accuracy와 val_accuracy, <code>metrics=['mse']</code>면 mse와 val_mse가 생깁니다.</p>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>history.history</code></td><td>기록의 기록</td><td>에폭마다의 점수가 이름별로 담긴 사전. 앞의 history는 우리가 붙인 변수 이름, 뒤의 history는 그 안의 칸 이름</td></tr>
+    <tr><td><code>['accuracy'] / ['val_accuracy']</code></td><td></td><td>훈련 정확도의 목록 / 검증 정확도의 목록. val_은 validation(검증)의 줄임</td></tr>
+    <tr><td><code>keys()</code></td><td>열쇠들</td><td>사전에 어떤 이름의 칸이 있는지</td></tr>
+    <tr><td><code>plt.plot(값들)</code></td><td>plot = 점을 찍어 잇다</td><td>값들을 순서대로 이은 선을 그린다. 두 번 부르면 선이 두 개</td></tr>
+    <tr><td><code>plt.xlabel() / plt.ylabel()</code></td><td>가로축 이름 / 세로축 이름</td><td>축에 이름을 붙인다</td></tr>
+    <tr><td><code>plt.legend([...])</code></td><td>범례</td><td>선마다 이름표를 붙인다. plot을 부른 순서대로</td></tr>
+    <tr><td><code>일반화</code></td><td></td><td>공부한 문제가 아닌 처음 보는 문제도 잘 푸는 것. 검증 점수로 가늠한다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-5</b><span>훈련과 검증의 변화를 한 그래프에</span></div>
   <pre><code>history.history.keys()                 # 어떤 키가 있는지 먼저 확인
@@ -1510,6 +1754,16 @@ val_loss     0.0323  0.0201  0.0143  0.0115  0.0103  0.0092  0.0084</pre>
   <figure class="dia"><div class="dia-t">두 함수가 받는 것과 돌려주는 것</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">채점</span><b>model.evaluate(X_valid, y_valid)</b><p>문제와 정답을 받아 <b>점수</b>를 돌려준다.<br>[loss, accuracy] 같은 숫자 목록</p></div><div class="card"><span class="k">답안</span><b>model.predict(X_valid)</b><p>문제만 받아 <b>예측값</b>을 돌려준다.<br>분류라면 확률, 회귀라면 숫자</p></div></div></div></figure>
 
   <p>학습이 끝난 딥러닝 모델에서 숫자를 꺼내는 방법은 둘입니다. <code>evaluate</code>는 정답을 함께 주면 <b>점수</b>를 돌려주고, <code>predict</code>는 입력만 주면 <b>예측값</b>을 돌려줍니다. 분류 모델의 예측값은 라벨이 아니라 확률이라, 한 번 더 바꿔 줘야 scikit-learn의 평가 함수에 넣을 수 있습니다.</p>
+  <figure class="dia"><div class="dia-t">확률이 라벨이 되기까지 · (pred &gt; 0.5).astype(int).flatten()</div><div class="dia-b"><div class="chain"><div class="panel"><div class="pt">① predict의 결과 · 확률</div><div class="mtw"><table class="mt"><tr><th>pred</th></tr><tr><td class="">[0.0002]</td></tr><tr><td class="">[0.9999]</td></tr><tr><td class="">[0.0006]</td></tr></table></div></div><div class="panel"><div class="pt">② <code>&gt; 0.5</code> · 절반을 넘는가</div><div class="mtw"><table class="mt"><tr><th></th></tr><tr><td class="">[False]</td></tr><tr><td class="">[True]</td></tr><tr><td class="">[False]</td></tr></table></div></div><div class="panel"><div class="pt">③ <code>.astype(int)</code> · 숫자로</div><div class="mtw"><table class="mt"><tr><th></th></tr><tr><td class="">[0]</td></tr><tr><td class="">[1]</td></tr><tr><td class="">[0]</td></tr></table></div></div><div class="panel"><div class="pt">④ <code>.flatten()</code> · 한 줄로 편다</div><div class="mtw"><table class="mt"><tr><th>y_pred</th></tr><tr><td class="hl">[0 1 0]</td></tr></table></div></div></div></div><figcaption>점으로 이어진 명령은 왼쪽부터 차례로 실행됩니다. 0.5는 "절반을 넘으면 1로 본다"는 기준선이고 <b>임계값</b>이라고 부릅니다. 대괄호가 두 겹인 것은 값이 한 칸짜리 줄로 하나씩 들어 있기 때문이고, flatten이 그 겹을 벗겨 한 줄로 만듭니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">보기가 여럿일 때 · argmax</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt">predict의 결과 · 보기마다의 확률 (예시)</div><div class="mtw"><table class="mt"><tr><th>자리 0</th><th>자리 1</th><th>자리 2</th></tr><tr><td class="">0.1</td><td class="">0.7</td><td class="">0.2</td></tr><tr><td class="">0.85</td><td class="">0.05</td><td class="">0.1</td></tr></table></div></div><div class="arr">np.argmax(pred, axis=1)</div><div class="panel"><div class="pt">행마다 가장 큰 값의 자리 번호</div><div class="mtw"><table class="mt"><tr><th>y_pred</th></tr><tr><td class="hl">1</td></tr><tr><td class="hl">0</td></tr></table></div></div></div></div><figcaption>arg max는 "가장 큰 값이 있는 <b>자리의 번호</b>"입니다. 값 자체(0.70)가 아니라 자리(1)를 돌려줍니다. 그 번호가 곧 예측한 보기입니다. <code>axis=1</code>은 "행마다 가로 방향으로 비교하라"는 뜻입니다.</figcaption></figure>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>evaluate()</code></td><td>평가하다</td><td>문제와 정답을 받아 점수를 돌려준다</td></tr>
+    <tr><td><code>predict()</code></td><td>예측하다</td><td>문제만 받아 답을 돌려준다</td></tr>
+    <tr><td><code>astype(int)</code></td><td>정수형으로</td><td>True/False를 1/0으로 바꾼다</td></tr>
+    <tr><td><code>flatten()</code></td><td>납작하게 펴다</td><td>겹겹의 목록을 한 줄로</td></tr>
+    <tr><td><code>np.argmax()</code></td><td>arg max</td><td>가장 큰 값이 있는 자리 번호</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-6</b><span>점수 꺼내기, 확률을 라벨로 바꾸기 (C-4b의 모델)</span></div>
   <pre><code>from sklearn.metrics import accuracy_score, confusion_matrix
@@ -1552,6 +1806,13 @@ confusion_matrix(y_valid, y_pred)</code></pre>
   <p>정답을 <code>to_categorical</code>로 원-핫으로 바꿔 학습했다면(C-4의 모양), 평가 함수에 넣기 전에 정답도 <code>np.argmax(y_valid, axis=1)</code>로 정수로 되돌립니다. 인코딩한 글자 라벨을 원래 이름으로 돌리려면 <code>le.inverse_transform(y_pred)</code>입니다.</p>
   <div class="plain"><b>새 손님에 빗대면</b><p>모델을 만든 목적은 결국 처음 보는 한 건을 예측하는 것입니다. 이때 새 데이터도 훈련 데이터가 거친 손질을 <b>똑같은 순서와 똑같은 기준</b>으로 거쳐야 합니다. 훈련 때는 재료를 깍둑썰기해서 익혔는데 새 재료를 통째로 넣으면 같은 요리가 나오지 않습니다.</p></div>
   <figure class="dia"><div class="dia-t">새 입력 한 건이 거치는 네 단계</div><div class="dia-b"><div class="flow"><div class="step"><i class="k" style="font-style:normal">1</i><b>같은 인코딩</b><span><code>pd.get_dummies</code></span></div><div class="step"><i class="k" style="font-style:normal">2</i><b>같은 열 구성</b><span><code>reindex(columns=X.columns)</code></span></div><div class="step"><i class="k" style="font-style:normal">3</i><b>같은 눈금</b><span><code>ss.transform</code> (fit 금지)</span></div><div class="step"><i class="k" style="font-style:normal">4</i><b>예측</b><span><code>model.predict</code></span></div></div></div></figure>
+  <h4 class="sub">이 문항에 나오는 말</h4>
+  <div class="tbl"><table class="gl"><thead><tr><th>코드에 나오는 말</th><th>말 그대로의 뜻</th><th>여기서 하는 일</th></tr></thead><tbody>
+    <tr><td><code>pd.DataFrame([new_data])</code></td><td></td><td>기록 한 건을 한 줄짜리 표로 만든다. 대괄호로 싸야 한 줄이 된다</td></tr>
+    <tr><td><code>reindex(columns=X.columns)</code></td><td>색인을 다시 매기다</td><td>열의 구성과 순서를 학습 때의 X와 똑같이 맞춘다</td></tr>
+    <tr><td><code>fill_value=0</code></td><td>채울 값</td><td>새로 생긴 빈 열은 0으로 채운다</td></tr>
+    <tr><td><code>ss.transform()</code></td><td>바꾸다</td><td>학습 때 재 둔 기준으로 눈금을 맞춘다. fit은 하지 않는다</td></tr>
+  </tbody></table></div>
 <div class="code">
   <div class="cap"><b>C-7</b><span>새 입력 한 건을 예측한다 - 학습 때와 같은 전처리를 그대로</span></div>
   <pre><code>new_data = {'rpm': 1300.0, 'flow_m3h': 110.0, 'dis_press_bar': 4.5, 'suc_press_bar': 0.8,
@@ -1638,6 +1899,12 @@ StandardScaler().fit_transform(new_df)                      # 하면 안 되는 
 <section class="part" id="terms">
   <div class="part-head"><span class="eyebrow">용어 정리</span><h2>한 번 더 짚는 핵심 용어</h2></div>
   <dl class="terms">
+    <div><dt>변수</dt><dd>값을 담아 두고 이름을 붙인 상자. <code>이름 = 값</code>으로 만든다.</dd></div>
+    <div><dt>함수 / 인자</dt><dd>이름 뒤에 괄호를 붙여 시키는 일 / 괄호 안에 적는 주문 사항.</dd></div>
+    <div><dt>데이터프레임</dt><dd>pandas가 다루는 표. 가로줄이 행, 세로줄이 열.</dd></div>
+    <div><dt>결측치 / 이상치</dt><dd>비어 있는 칸(NaN) / 다른 값들과 동떨어진 값.</dd></div>
+    <div><dt>모델 / 학습 / 예측</dt><dd>규칙을 담는 프로그램 / 답이 적힌 예시에서 규칙을 찾는 일(fit) / 새 입력에 규칙을 적용하는 일(predict).</dd></div>
+    <div><dt>사분위수</dt><dd>값을 줄 세워 네 등분한 지점의 값. Q1, 중앙값, Q3.</dd></div>
     <div><dt>피처 X / 레이블 y</dt><dd>모델에 넣는 입력 열들 / 맞혀야 할 정답 열. 타깃이라고도 부른다.</dd></div>
     <div><dt>분류 / 회귀</dt><dd>범주를 맞히는 문제 / 연속된 숫자를 맞히는 문제.</dd></div>
     <div><dt>IQR</dt><dd>Q3 - Q1. 가운데 50%가 퍼진 폭. 울타리는 여기에 1.5를 곱해 친다.</dd></div>
