@@ -199,10 +199,50 @@ svg text{font-family:"Inter","Noto Sans KR",sans-serif}
   body{font-size:16px}
 }
 @media (prefers-reduced-motion:reduce){.toc a{transition:none}}
+
+/* map: a full index on the left, a quick-jump board on the right; a drawer below 1200px */
+h2,h3,section.part,header,.jump{scroll-margin-top:calc(16px + env(safe-area-inset-top,0px))}
+.shell{display:grid;grid-template-columns:minmax(0,880px);justify-content:center}
+.shell>.wrap{min-width:0;width:100%;margin:0}
+.side{display:none;font-size:13.5px;line-height:1.45}
+.side h5{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;color:var(--muted);margin:22px 0 8px}
+.side h5:first-of-type{margin-top:0}
+.side a{display:block;padding:5px 10px;color:var(--fg2);text-decoration:none;border-left:1px solid var(--line)}
+.side a:hover{color:var(--fg)}
+.side a.g{font-weight:600;color:var(--fg);border-left:0;padding:0;margin:16px 0 6px}
+.side a.g small{display:block;font-family:var(--mono);font-size:11px;font-weight:400;color:var(--accent);margin-bottom:1px}
+.side a.on{color:var(--accent);border-left-color:var(--accent);background:var(--accent-soft);font-weight:500}
+.side a.g.on{background:none}
+.grid14{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.side .grid14 a{display:grid;place-items:center;height:34px;padding:0;border:1px solid var(--line);border-radius:4px;font-family:var(--mono);font-variant-numeric:tabular-nums;background:var(--surface)}
+.side .grid14 a.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.prog{height:3px;background:var(--fill);border-radius:2px;overflow:hidden;margin-top:8px}
+.prog i{display:block;height:100%;width:0;background:var(--accent)}
+.prog-t{font-family:var(--mono);font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums}
+.side .close{display:none}
+.mapbtn{position:fixed;right:calc(16px + env(safe-area-inset-right,0px));bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;height:44px;padding:0 18px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--body);box-shadow:var(--shadow);cursor:pointer}
+@media (min-width:1200px){
+  .shell{grid-template-columns:236px minmax(0,880px) 200px}
+  .shell .wrap{margin:0;max-width:none}
+  .side{display:block;position:sticky;top:env(safe-area-inset-top,0px);align-self:start;max-height:100vh;overflow-y:auto;padding:76px 18px 40px;scrollbar-width:thin}
+  .side.right{padding-left:22px}
+  .side .only-drawer{display:none}
+  .mapbtn{display:none}
+}
+@media (max-width:1199px){
+  .shell.open .side.left{display:block;position:fixed;inset:0;z-index:30;background:var(--bg);overflow-y:auto;font-size:15px;
+    padding:calc(20px + env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) calc(40px + env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
+  .shell.open .side a{padding-block:9px}
+  .shell.open .side a.g{padding:0}
+  .shell.open .side .grid14 a{height:44px}
+  .shell.open .side .close{display:block;margin-left:auto;height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font:500 14px var(--body);cursor:pointer}
+}
 </style>
 
 </head>
 <body>
+<div class="shell" id="shell">
+<nav class="side left" id="navL" aria-label="전체 지도"></nav>
 <div class="wrap">
 <header>
   <span class="eyebrow">AICE Associate 실기 대비</span>
@@ -709,6 +749,7 @@ dtypes: bool(2), float64(7), int64(1)
   <figure class="dia"><div class="dia-t">두 번 가른다 · 세로로 한 번, 가로로 한 번</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt">① 답 열을 떼어 낸다 · X와 y</div><div class="mtw"><table class="mt"><tr><th class="">유량</th><th class="">진동</th><th class="">온도</th><th class="hl">label</th></tr><tr><td class="">141.2</td><td class="">2.9</td><td class="">49.1</td><td class="hl">0</td></tr><tr><td class="">138.7</td><td class="">3.0</td><td class="">49.4</td><td class="hl">0</td></tr><tr><td class="">109.5</td><td class="">7.1</td><td class="">52.2</td><td class="hl">1</td></tr></table></div></div><div class="arr">그다음</div><div class="panel"><div class="pt">② 행을 훈련과 검증으로 나눈다 (연습 데이터의 실제 행 수)</div><div class="split"><div class="a" style="width:70%">훈련 44,020행 · 70%</div><div class="b" style="width:30%">검증 18,866행</div></div></div></div></div><figcaption>색칠한 열이 y, 나머지가 X입니다. 둘을 각각 훈련과 검증으로 나누므로 결과물은 X_train, X_valid, y_train, y_valid 네 개입니다.</figcaption></figure>
 
   <p>모델이 본 적 없는 데이터에서 얼마나 맞히는지를 보려면, 일부를 떼어 두고 학습에 쓰지 않아야 합니다. 먼저 정답 열 y와 나머지 X를 가르고, 그다음 행을 나눕니다.</p>
+  <figure class="dia"><div class="dia-t">변수 이름 읽는 법 · 글자 둘을 이어 붙인 이름입니다</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">앞 글자</span><b>X = 문제</b><p>답을 뺀 나머지 열 전부. 모델이 보고 판단하는 재료입니다. 열이 여럿이라 대문자로 씁니다.</p></div><div class="card"><span class="k">앞 글자</span><b>y = 정답</b><p>맞혀야 할 열 하나. 연습 데이터에서는 label 열입니다. 열이 하나라 소문자로 씁니다.</p></div><div class="card"><span class="k">뒷말</span><b>train = 공부용</b><p>train은 "훈련하다"입니다. 모델이 규칙을 찾을 때 보는 쪽.</p></div><div class="card"><span class="k">뒷말</span><b>valid = 확인용</b><p>validation(검증)의 줄임. 공부가 끝난 뒤 실력을 재는 쪽. test라고 부르기도 합니다.</p></div></div><div class="mtw"><table class="mt"><tr><th class=""></th><th class="hl">문제 (X)</th><th class="hl">정답 (y)</th></tr><tr><td class=""><b>공부용 (train)</b> · 44,020행</td><td class="hl">X_train · 공부할 때 보는 문제</td><td class="hl">y_train · 공부할 때 맞춰 보는 정답</td></tr><tr><td class=""><b>확인용 (valid)</b> · 18,866행</td><td class="hl">X_valid · 실력 확인용 문제</td><td class="hl">y_valid · 실력 확인용 정답</td></tr></table></div></div><figcaption>네 개의 이름은 이 표의 네 칸입니다. <code>X_train</code>은 "공부용 문제지", <code>y_valid</code>는 "확인용 정답지"로 읽으면 됩니다. 이후 문항에서 이 네 이름이 계속 나옵니다.</figcaption></figure>
 <div class="code">
   <div class="cap"><b>B-3</b><span>X와 y를 가르고 훈련과 검증으로 나눈다</span></div>
   <pre><code>from sklearn.model_selection import train_test_split
@@ -747,30 +788,15 @@ print(y.mean(), y_train.mean(), y_valid.mean())</code></pre>
     <p class="res">정답이 한쪽으로 쏠린 분류 데이터일수록 stratify가 값을 합니다.</p>
   </div>
 
-  <h3><span class="q">문항 9 · 데이터 스케일링</span>눈금을 맞추되, 기준은 훈련에서만 잡는다</h3>
-  <div class="plain"><b>시험 점수에 빗대면</b><p>100점 만점 시험에서 받은 70점과 10점 만점 시험에서 받은 9점을 그대로 더하면 100점짜리 시험이 결과를 좌우합니다. 공정하게 견주려면 같은 눈금으로 환산해야 합니다. 표에서도 열마다 단위와 크기가 달라 같은 일이 벌어집니다.</p></div>
+  <h3><span class="q">문항 9 · 데이터 스케일링</span>열마다 다른 눈금을 하나로 맞춘다</h3>
+  <div class="plain"><b>시험 점수에 빗대면</b><p>100점 만점 시험에서 받은 70점과 10점 만점 시험에서 받은 9점을 그대로 더하면 100점짜리 시험이 결과를 좌우합니다. 공정하게 견주려면 두 점수를 같은 눈금으로 환산해야 합니다. 표에서도 똑같은 일이 벌어집니다. 어떤 열은 수백 단위로, 어떤 열은 소수점 단위로 적혀 있기 때문입니다.</p></div>
+
+  <p><b>스케일링(scaling)</b>은 "눈금(scale)을 맞춘다"는 뜻입니다. 열마다 제각각인 단위와 크기를 지우고, 모든 열을 비슷한 크기의 숫자로 환산합니다. 값의 순서와 간격의 비율은 그대로 두고 눈금만 바꿉니다. 그리고 이 환산을 해 주는 도구를 <b>스케일러(scaler)</b>라고 부릅니다. 눈금을 맞추는 자, 정도로 읽으면 됩니다.</p>
   <figure class="dia"><div class="dia-t">눈금을 맞추기 전과 후 (연습용 예시 값)</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt">원래 값 · 유량이 압도한다</div><div class="bars"><div class="bar-row"><span>유량 143.0</span><span class="tr"><i class="" style="width:100.0%"></i></span><span>143.0</span></div><div class="bar-row"><span>진동 3.60</span><span class="tr"><i class="" style="width:2.5%"></i></span><span>3.6</span></div></div></div><div class="arr">표준화</div><div class="panel"><div class="pt">평균에서 표준편차의 몇 배 떨어졌나</div><div class="bars"><div class="bar-row"><span>유량 0.1</span><span class="tr"><i class="" style="width:3.3%"></i></span><span>0.1</span></div><div class="bar-row"><span>진동 3.0</span><span class="tr"><i class="w" style="width:100.0%"></i></span><span>3.0</span></div></div></div></div></div><figcaption>원래 숫자로는 유량이 40배 커 보이지만, 눈금을 맞추면 평소와 달라진 쪽은 진동이라는 것이 드러납니다. 아래 "숫자로 따라가기"가 이 계산입니다.</figcaption></figure>
 
-  <p>유량은 수십 단위로 움직이고 진동은 소수점 단위로 움직입니다. 이대로 모델에 넣으면 숫자가 큰 유량 쪽에 끌려갑니다. 스케일링은 그 눈금을 맞추는 일입니다.</p>
-  <div class="tbl"><table>
-    <thead><tr><th>스케일러</th><th>계산</th><th>결과</th><th>성격</th></tr></thead>
-    <tbody>
-      <tr><td><code>StandardScaler</code></td><td>(x - 평균) ÷ 표준편차</td><td>평균 0, 표준편차 1</td><td>가장 흔하다. 이상치에 평균과 표준편차가 끌려간다</td></tr>
-      <tr><td><code>MinMaxScaler</code></td><td>(x - 최소) ÷ (최대 - 최소)</td><td>0과 1 사이</td><td>이상치 하나가 범위 전체를 눌러 버린다</td></tr>
-      <tr><td><code>RobustScaler</code></td><td>(x - 중앙값) ÷ IQR</td><td>중앙값 0</td><td>이상치에 덜 흔들린다</td></tr>
-    </tbody>
-  </table></div>
-  <div class="calc">
-    <span class="tag">숫자로 따라가기 · 표준화가 무엇을 바꾸는가 (연습용 예시 값)</span>
-    <ol>
-      <li>훈련 데이터의 유량 평균 140.0, 표준편차 30.0. 진동 평균 2.70, 표준편차 0.30.</li>
-      <li>의심스러운 행: 유량 143.0, 진동 3.60.</li>
-      <li>유량 z = (143.0 - 140.0) ÷ 30.0 = <span class="num">0.1</span></li>
-      <li>진동 z = (3.60 - 2.70) ÷ 0.30 = <span class="num">3.0</span></li>
-    </ol>
-    <p class="res">원래 단위에서는 유량의 차이 3.0이 진동의 차이 0.9보다 커 보였습니다. 표준화하고 나면 진동이 평소의 세 배나 벗어났다는 사실이 드러납니다.</p>
-  </div>
-
+  <h4 style="margin:34px 0 10px;font-size:17px">스케일러가 하는 동작은 둘뿐입니다</h4>
+  <div class="plain"><b>환전에 빗대면</b><p>여행 경비를 달러로 바꾸려면 먼저 <b>환율을 정하고</b>, 그 환율로 <b>돈을 바꿉니다</b>. 스케일러도 같은 순서입니다. 먼저 데이터를 훑어 기준을 정하고, 그 기준으로 값을 바꿉니다. 앞의 동작이 <code>fit</code>, 뒤의 동작이 <code>transform</code>입니다.</p></div>
+  <figure class="dia"><div class="dia-t">fit과 transform</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">첫째 동작</span><b>fit · 기준을 잰다</b><p>데이터를 훑어 보고 "평균은 얼마, 흩어진 폭은 얼마"를 재서 <b>기억해 둔다</b>. 값은 아직 바뀌지 않는다. 환율을 정하는 단계.</p></div><div class="card"><span class="k">둘째 동작</span><b>transform · 값을 바꾼다</b><p>기억해 둔 기준으로 모든 값을 환산한다. 기준은 건드리지 않는다. 정해 둔 환율로 환전하는 단계.</p></div><div class="card"><span class="k">첫째 + 둘째</span><b>fit_transform · 한 번에</b><p>기준을 재고 곧바로 바꾼다. 두 동작을 이어 붙인 줄임말.</p></div></div></div><figcaption>여기서 시험의 단골 문제가 나옵니다. <b>환율은 공부용 문제지(X_train)에서 한 번만 정합니다.</b> 확인용 문제지(X_valid)는 그 환율로 바꾸기만 합니다. 확인용에서 환율을 새로 정하면 두 문제지가 서로 다른 환율로 바뀌어, 같은 100이 다른 숫자가 됩니다.</figcaption></figure>
   <figure class="fig">
     <svg viewBox="0 0 720 190" role="img" aria-label="스케일러를 훈련 데이터로 학습시키고 훈련과 검증에 같은 기준을 적용하는 흐름">
       <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 z" fill="var(--muted)"/></marker></defs>
@@ -794,6 +820,45 @@ print(y.mean(), y_train.mean(), y_valid.mean())</code></pre>
     </svg>
     <figcaption>스케일러는 훈련 데이터에서 기준(평균, 표준편차 등)을 배우고(fit), 그 기준으로 훈련과 검증을 똑같이 바꿉니다(transform). 검증 데이터로는 기준을 다시 배우지 않습니다.</figcaption>
   </figure>
+
+  <h4 style="margin:34px 0 10px;font-size:17px">세 가지 스케일러는 세 가지 환산 규칙입니다</h4>
+  <p>이름이 길어 보이지만 뒤의 Scaler는 모두 "눈금 맞추는 도구"이고, 앞 단어가 <b>무엇을 기준으로 삼는지</b>를 말해 줍니다. 세 도구 모두 "어떤 값을 0으로 삼고, 얼마만큼을 한 칸으로 칠 것인가"만 다릅니다.</p>
+  <figure class="dia"><div class="dia-t">이름을 풀면 규칙이 보입니다</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">평균이 기준</span><b>StandardScaler</b><p><b>Standard = 표준.</b> 평균을 0으로 삼고, 값들이 평균에서 보통 떨어진 폭(표준편차)을 한 칸으로 친다.<br><br>일상의 말로: "반 평균보다 몇 칸 위인가". 가장 널리 쓰는 기본 도구.</p></div><div class="card"><span class="k">양 끝이 기준</span><b>MinMaxScaler</b><p><b>Min = 가장 작은 값, Max = 가장 큰 값.</b> 가장 작은 값을 0, 가장 큰 값을 1로 삼고 나머지를 그 사이에 놓는다.<br><br>일상의 말로: "꼴찌를 0, 1등을 1로 놓으면 나는 어디쯤인가".</p></div><div class="card"><span class="k">가운데가 기준</span><b>RobustScaler</b><p><b>Robust = 튼튼한.</b> 줄 세웠을 때 한가운데 값(중앙값)을 0으로 삼고, 가운데 절반이 퍼진 폭(IQR)을 한 칸으로 친다.<br><br>일상의 말로: "딱 중간인 사람보다 몇 칸 위인가". 유난히 튀는 값이 있어도 기준이 흔들리지 않는다.</p></div></div></div></figure>
+  <p>말로는 비슷해 보이니 숫자 다섯 개로 직접 바꿔 봅니다. 유량이 <span class="num">100, 120, 140, 160, 500</span>으로 기록됐다고 합시다. 앞의 넷은 평범한 값이고 마지막 500은 혼자 멀리 튄 값입니다.</p>
+  <div class="calc">
+    <span class="tag">숫자로 따라가기 · 같은 다섯 값을 세 가지 규칙으로 (연습용 예시 값)</span>
+    <ol>
+      <li><b>StandardScaler.</b> 평균은 (100 + 120 + 140 + 160 + 500) ÷ 5 = <span class="num">204</span>. 표준편차는 <span class="num">149.3</span>. 값 100은 (100 - 204) ÷ 149.3 = <span class="num">-0.70</span>.</li>
+      <li><b>MinMaxScaler.</b> 가장 작은 값 100, 가장 큰 값 500. 값 120은 (120 - 100) ÷ (500 - 100) = <span class="num">0.05</span>.</li>
+      <li><b>RobustScaler.</b> 한가운데 값은 140. 가운데 절반의 폭은 160 - 120 = 40. 값 100은 (100 - 140) ÷ 40 = <span class="num">-1.00</span>, 값 500은 (500 - 140) ÷ 40 = <span class="num">9.00</span>.</li>
+    </ol>
+    <div class="mtw"><table class="mt"><tr><th class="">원래 값</th><th class="">StandardScaler</th><th class="">MinMaxScaler</th><th class="">RobustScaler</th></tr><tr><td class="">100</td><td class="">-0.70</td><td class="">0.00</td><td class="">-1.00</td></tr><tr><td class="">120</td><td class="">-0.56</td><td class="">0.05</td><td class="">-0.50</td></tr><tr><td class="">140</td><td class="">-0.43</td><td class="">0.10</td><td class="">0.00</td></tr><tr><td class="">160</td><td class="">-0.29</td><td class="">0.15</td><td class="">0.50</td></tr><tr><td class="na">500</td><td class="na">1.98</td><td class="na">1.00</td><td class="na">9.00</td></tr></table></div>
+    <p class="res">표는 scikit-learn의 세 스케일러에 이 다섯 값을 실제로 넣어 얻은 결과입니다. 주황 줄이 튀는 값 500입니다.</p>
+  </div>
+  <figure class="dia"><div class="dia-t">바꾼 뒤의 값을 같은 눈금자에 찍어 보면</div><div class="dia-b"><svg viewBox="0 0 680 210" role="img" aria-label="세 가지 방법으로 바꾼 뒤의 값을 같은 눈금자 위에 찍은 그림"><line x1="173.0" y1="24" x2="173.0" y2="176" stroke="var(--line)"/><text x="173.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">-1</text><line x1="219.0" y1="24" x2="219.0" y2="176" stroke="var(--line)"/><text x="219.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">0</text><line x1="265.0" y1="24" x2="265.0" y2="176" stroke="var(--line)"/><text x="265.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">1</text><line x1="311.0" y1="24" x2="311.0" y2="176" stroke="var(--line)"/><text x="311.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">2</text><line x1="357.0" y1="24" x2="357.0" y2="176" stroke="var(--line)"/><text x="357.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">3</text><line x1="403.0" y1="24" x2="403.0" y2="176" stroke="var(--line)"/><text x="403.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">4</text><line x1="449.0" y1="24" x2="449.0" y2="176" stroke="var(--line)"/><text x="449.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">5</text><line x1="495.0" y1="24" x2="495.0" y2="176" stroke="var(--line)"/><text x="495.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">6</text><line x1="541.0" y1="24" x2="541.0" y2="176" stroke="var(--line)"/><text x="541.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">7</text><line x1="587.0" y1="24" x2="587.0" y2="176" stroke="var(--line)"/><text x="587.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">8</text><line x1="633.0" y1="24" x2="633.0" y2="176" stroke="var(--line)"/><text x="633.0" y="196" font-size="11" fill="var(--muted)" text-anchor="middle">9</text><text x="14" y="54" font-size="12.5" font-weight="600" fill="var(--fg)">StandardScaler</text><line x1="150.0" y1="50" x2="656.0" y2="50" stroke="var(--muted)" stroke-width="1"/><circle cx="187.0" cy="50" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="193.1" cy="50" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="199.3" cy="50" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="205.4" cy="50" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="310.2" cy="50" r="6" fill="var(--warn)" fill-opacity="1"/><text x="310.2" y="38" font-size="11" fill="var(--warn)" text-anchor="middle">1.98</text><text x="14" y="106" font-size="12.5" font-weight="600" fill="var(--fg)">MinMaxScaler</text><line x1="150.0" y1="102" x2="656.0" y2="102" stroke="var(--muted)" stroke-width="1"/><circle cx="219.0" cy="102" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="221.3" cy="102" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="223.6" cy="102" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="225.9" cy="102" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="265.0" cy="102" r="6" fill="var(--warn)" fill-opacity="1"/><text x="265.0" y="90" font-size="11" fill="var(--warn)" text-anchor="middle">1.00</text><text x="14" y="158" font-size="12.5" font-weight="600" fill="var(--fg)">RobustScaler</text><line x1="150.0" y1="154" x2="656.0" y2="154" stroke="var(--muted)" stroke-width="1"/><circle cx="173.0" cy="154" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="196.0" cy="154" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="219.0" cy="154" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="242.0" cy="154" r="6" fill="var(--accent)" fill-opacity="0.75"/><circle cx="633.0" cy="154" r="6" fill="var(--warn)" fill-opacity="1"/><text x="633.0" y="142" font-size="11" fill="var(--warn)" text-anchor="middle">9.00</text></svg></div><figcaption>초록 점 넷이 평범한 값, 주황 점이 500입니다. <b>MinMaxScaler</b>는 500 하나가 "가장 큰 값 = 1"을 차지하는 바람에 평범한 값 넷이 0~0.15 사이에 눌려 붙었습니다. <b>StandardScaler</b>는 500이 평균을 204로 끌어올려, 평범한 값 넷이 모두 평균 아래(음수)가 됐습니다. <b>RobustScaler</b>는 기준이 가운데 값이라 500의 영향을 받지 않았고, 평범한 값들이 -1에서 0.5까지 고르게 놓였습니다. 대신 500은 9로 멀리 떨어져 그대로 튑니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">어느 것을 쓰나</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">시험에서는</span><b>문항이 이름을 말해 준다</b><p>시험에서는 "StandardScaler를 사용하세요"처럼 지정합니다. 지정된 것을 그대로 씁니다. 분류 샘플은 StandardScaler, 회귀 샘플은 RobustScaler였습니다.</p></div><div class="card"><span class="k">고른다면</span><b>튀는 값이 많이 남아 있다</b><p>RobustScaler가 덜 흔들립니다.</p></div><div class="card"><span class="k">고른다면</span><b>값이 0과 1 사이여야 한다</b><p>MinMaxScaler. 범위가 정해져 있어야 하는 경우에 씁니다.</p></div><div class="card"><span class="k">고른다면</span><b>특별한 사정이 없다</b><p>StandardScaler. 가장 흔한 기본값입니다.</p></div></div></div><figcaption>쓰는 법은 셋이 똑같습니다. 이름만 바꿔 끼우면 됩니다.</figcaption></figure>
+
+  <h4 style="margin:34px 0 10px;font-size:17px">코드로 옮기면 네 줄입니다</h4>
+  <div class="tbl"><table>
+    <thead><tr><th>코드</th><th>우리말로 읽으면</th></tr></thead>
+    <tbody>
+      <tr><td><code>from sklearn.preprocessing import StandardScaler</code></td><td>공구 상자에서 "표준 눈금 맞추는 도구"를 꺼낸다</td></tr>
+      <tr><td><code>ss = StandardScaler()</code></td><td>그 도구를 하나 만들어 <code>ss</code>라는 이름을 붙인다. 아직 아무 기준도 모르는 빈 도구다</td></tr>
+      <tr><td><code>X_train = ss.fit_transform(X_train)</code></td><td>공부용 문제지로 기준을 재고(fit), 그 기준으로 공부용 문제지를 바꾼다(transform). 바꾼 결과를 같은 이름에 다시 담는다</td></tr>
+      <tr><td><code>X_valid = ss.transform(X_valid)</code></td><td>방금 잰 기준 그대로 확인용 문제지를 바꾼다. 기준은 새로 재지 않는다</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><div class="ic">!</div><p><b>정답(y)은 바꾸지 않습니다.</b> 눈금을 맞추는 대상은 문제지인 X뿐입니다. <code>y_train</code>과 <code>y_valid</code>에는 스케일러를 쓰지 않습니다.</p></div>
+  <div class="calc">
+    <span class="tag">숫자로 따라가기 · 표준화가 무엇을 바꾸는가 (연습용 예시 값)</span>
+    <ol>
+      <li>훈련 데이터의 유량 평균 140.0, 표준편차 30.0. 진동 평균 2.70, 표준편차 0.30.</li>
+      <li>의심스러운 행: 유량 143.0, 진동 3.60.</li>
+      <li>유량 z = (143.0 - 140.0) ÷ 30.0 = <span class="num">0.1</span></li>
+      <li>진동 z = (3.60 - 2.70) ÷ 0.30 = <span class="num">3.0</span></li>
+    </ol>
+    <p class="res">원래 단위에서는 유량의 차이 3.0이 진동의 차이 0.9보다 커 보였습니다. 표준화하고 나면 진동이 평소의 세 배나 벗어났다는 사실이 드러납니다.</p>
+  </div>
 
 <div class="code">
   <div class="cap"><b>B-4</b><span>fit_transform은 훈련에만, 검증에는 transform</span></div>
@@ -1646,6 +1711,75 @@ StandardScaler().fit_transform(new_df)                      # 하면 안 되는 
 
 <footer>출처: AICE Associate 출제 범위 안내(14문항, 90분, 데이터 분석 30점 · 데이터 전처리 30점 · AI 모델링 40점), AICE Associate 샘플 문항 분류(와인 품질등급)와 회귀(내비게이션 실주행시간) 노트북. 딥러닝 원리, 평가와 예측, 에러 대응 부분은 「AICE Associate 딥러닝 실전 교본」(newids.github.io/dl4aice)의 구성과 대조해 빠진 주제를 보완했습니다. "실행 결과"는 연습 데이터 pump_multivar.csv로 직접 돌린 값입니다(scikit-learn 1.5, TensorFlow 2.20 / Keras 3.10). 딥러닝 결과는 난수와 환경에 따라 소수 셋째 자리쯤에서 달라질 수 있습니다. C-0(XGBoost, LightGBM), 회귀 지표, 주석으로 처리한 줄은 실행하지 않았습니다. "연습용 예시 값"이라고 적은 숫자는 계산 연습을 위해 만든 값입니다.</footer>
 </div>
+<nav class="side right" id="navR" aria-label="빠른 이동"></nav>
+</div>
+<button class="mapbtn" id="mapbtn" type="button" aria-controls="navL" aria-expanded="false">지도</button>
+
+<script>
+(function(){
+  var shell=document.getElementById('shell'),L=document.getElementById('navL'),R=document.getElementById('navR'),btn=document.getElementById('mapbtn');
+  var wrap=shell.querySelector('.wrap'),heads=[],n=0,reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+  function link(target,label,cls){
+    if(!target.id)target.id='s'+(++n);
+    var a=el('a',cls||'',label);a.href='#'+target.id;
+    a.addEventListener('click',function(ev){ev.preventDefault();close();target.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});});
+    return a;
+  }
+  function label(h){var q=h.querySelector('.q');if(!q)return h.textContent.trim();var t=q.textContent.trim();
+    return t.indexOf('·')>-1?t:(t+' · '+h.textContent.replace(q.textContent,'').trim());}
+  // left: the whole map
+  var cb=el('button','close','닫기');cb.type='button';cb.addEventListener('click',close);L.appendChild(cb);
+  L.appendChild(el('h5','', '전체 지도'));
+  var top=wrap.querySelector('header');L.appendChild(link(top,'<small>처음</small>교안 소개','g'));
+  var nums={},numOf=[];
+  wrap.querySelectorAll('section.part').forEach(function(sec){
+    var h2=sec.querySelector('h2'),eb=sec.querySelector('.eyebrow');
+    var g=link(sec,'<small>'+(eb?eb.textContent.split('·')[0].trim():'')+'</small>'+h2.textContent.trim(),'g');L.appendChild(g);
+    heads.push({node:sec,a:g,group:true});
+    sec.querySelectorAll('h3').forEach(function(h){
+      var a=link(h,label(h));L.appendChild(a);
+      var q=h.querySelector('.q'),m=q&&q.textContent.match(/^문항 (\d+)(?:~(\d+))? ·/),rng=null;
+      if(m){var a0=+m[1],b0=+(m[2]||m[1]);rng=[a0,b0];for(var k=a0;k<=b0;k++){if(!nums[k]||(nums[k].start!==k&&a0===k))nums[k]={h:h,start:a0};}}
+      heads.push({node:h,a:a,rng:rng});
+    });
+  });
+  // right: quick jump
+  function board(parent){
+    parent.appendChild(el('h5','', '문항 번호로 가기'));
+    var g=el('div','grid14');for(var k=1;k<=14;k++){if(nums[k]){var a=link(nums[k].h,String(k));a.dataset.n=k;g.appendChild(a);}}
+    parent.appendChild(g);
+    parent.appendChild(el('h5','', '자주 찾는 자료'));
+    var picks=[['샘플 문항 두 세트','문항별 비교 표'],['문항 유형은 세 가지','문항 유형 세 가지'],['먼저 가릴 것','분류와 회귀 구분'],['문항 9와 10 사이','모델 넣기 전 점검'],['문항 13 · 딥러닝 모델 학습','출력층 · 손실 조합'],['문항 14 뒤','예측값 바꾸는 법'],['실행하다 만나는 에러','에러 문구 모음'],['시험 직전 체크리스트','시험 직전 체크리스트']];
+    picks.forEach(function(p){var h=[].find.call(wrap.querySelectorAll('h3'),function(x){return x.textContent.indexOf(p[0])>-1;});if(h)parent.appendChild(link(h,p[1]));});
+    [['fix','정정 문항 패턴'],['terms','용어 정리'],['quiz','점검 문제']].forEach(function(p){var t=document.getElementById(p[0]);if(t)parent.appendChild(link(t,p[1]));});
+  }
+  board(R);
+  R.appendChild(el('h5','', '읽은 위치'));
+  var pt=el('div','prog-t','0%'),pb=el('div','prog','<i></i>');R.appendChild(pt);R.appendChild(pb);
+  R.appendChild(el('h5','', ''));R.appendChild(link(top,'맨 위로'));
+  var d=el('div','only-drawer');board(d);L.appendChild(d);
+  // drawer
+  function close(){shell.classList.remove('open');btn.setAttribute('aria-expanded','false');}
+  btn.addEventListener('click',function(){var o=shell.classList.toggle('open');btn.setAttribute('aria-expanded',o?'true':'false');if(o)L.scrollTop=0;});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')close();});
+  // scroll spy
+  var tick=false;
+  function spy(){
+    tick=false;var cur=null,grp=null;
+    for(var i=0;i<heads.length;i++){var t=heads[i].node.getBoundingClientRect().top;if(t<140){if(heads[i].group)grp=heads[i];else cur=heads[i];}else if(t>140&&!heads[i].group)break;}
+    if(cur&&grp&&!grp.node.contains(cur.node))cur=null;
+    heads.forEach(function(h){h.a.classList.toggle('on',h===cur||h===grp);});
+    document.querySelectorAll('.grid14 a').forEach(function(a){var k=+a.dataset.n;a.classList.toggle('on',!!(cur&&cur.rng&&k>=cur.rng[0]&&k<=cur.rng[1]));});
+    var on=cur||grp;
+    if(on&&L.scrollHeight>L.clientHeight&&!shell.classList.contains('open')){var r=on.a.offsetTop-L.clientHeight/2;if(Math.abs(L.scrollTop-r)>L.clientHeight/3)L.scrollTop=r;}
+    var max=document.documentElement.scrollHeight-innerHeight,p=max>0?Math.round(100*Math.min(1,Math.max(0,scrollY/max))):0;
+    pt.textContent=p+'%';pb.firstChild.style.width=p+'%';
+  }
+  addEventListener('scroll',function(){if(!tick){tick=true;requestAnimationFrame(spy);}},{passive:true});
+  addEventListener('resize',spy);spy();
+})();
+</script>
 
 </body>
 </html>
