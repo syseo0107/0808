@@ -262,6 +262,7 @@ table.gl td:first-child code{white-space:nowrap}
   </div>
   <nav class="toc" aria-label="목차">
     <a href="#map"><span class="n">시험 지도</span><span class="t">14문항은 한 줄로 이어진다</span><span class="s">출제 범위 · 문항 유형 · 연습 데이터 · 시간 배분</span></a>
+    <a href="#p0"><span class="n">기초 다지기</span><span class="t">파이썬 · 넘파이 · 판다스</span><span class="s">자료형 · 배열 · 표 고르기와 합치기</span></a>
     <a href="#p1"><span class="n">1부 · 문항 1~4</span><span class="t">데이터 분석</span><span class="s">라이브러리 · 데이터 파악 · 품질 점검 · 시각화</span></a>
     <a href="#p2"><span class="n">2부 · 문항 5~9</span><span class="t">데이터 전처리</span><span class="s">이상치 · 결측치 · 인코딩 · 분할 · 스케일링</span></a>
     <a href="#p3"><span class="n">3부 · 문항 10~14</span><span class="t">AI 모델링</span><span class="s">머신러닝 · 딥러닝의 원리와 구현 · 평가와 예측</span></a>
@@ -356,6 +357,239 @@ table.gl td:first-child code{white-space:nowrap}
 </section>
 
 <!-- ============================ PART 1 ============================ -->
+<section class="part" id="p0">
+  <div class="part-head">
+    <span class="eyebrow">기초 다지기 · 문항에 들어가기 전에</span>
+    <h2>파이썬, 넘파이, 판다스의 기본기</h2>
+    <p class="sub">14문항의 코드는 모두 이 세 가지 위에 서 있습니다. 파이썬은 말하는 법, 넘파이는 숫자 묶음을 다루는 법, 판다스는 표를 다루는 법입니다. 이미 익숙하다면 왼쪽 지도에서 1부로 건너뛰어도 됩니다.</p>
+  </div>
+  <div class="goals"><strong>이 부분에서 얻어 갈 것</strong><ul>
+    <li>값의 종류 일곱 가지를 구분하고, 리스트에서 원하는 자리의 값을 꺼낼 수 있다.</li>
+    <li>리스트와 넘파이 배열의 덧셈이 왜 다른 결과를 내는지 말할 수 있다.</li>
+    <li>표에서 행과 열을 이름으로, 번호로, 조건으로 골라낼 수 있다.</li>
+    <li>표를 정렬하고, 묶어서 요약하고, 두 표를 합칠 수 있다.</li>
+  </ul></div>
+
+  <h3><span class="q">파이썬 · 값의 종류</span>값에는 종류가 있고, 종류마다 할 수 있는 일이 다르다</h3>
+  <div class="plain"><b>서랍에 빗대면</b><p>부엌 서랍에는 수저 칸, 접시 칸, 냄비 칸이 따로 있습니다. 파이썬의 값도 종류가 나뉘어 있고, 이 종류를 <b>자료형</b>이라고 합니다. 숫자끼리는 더할 수 있지만 숫자와 글자는 더할 수 없는 것처럼, 자료형에 따라 할 수 있는 계산이 정해집니다. 에러의 상당수가 "이 종류로는 그 일을 할 수 없다"는 뜻입니다.</p></div>
+  <figure class="dia"><div class="dia-t">자료형 일곱 가지</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">숫자</span><b>정수 int</b><p>소수점 없는 숫자. <code>1</code>, <code>-3</code></p></div><div class="card"><span class="k">숫자</span><b>실수 float</b><p>소수점 있는 숫자. <code>3.14</code></p></div><div class="card"><span class="k">글자</span><b>문자열 str</b><p>따옴표로 감싼 글자. <code>'hello'</code></p></div><div class="card"><span class="k">참 · 거짓</span><b>불리언 bool</b><p>참 아니면 거짓. <code>True</code>, <code>False</code></p></div><div class="card"><span class="k">묶음</span><b>리스트 list</b><p>여러 값을 순서대로 담은 줄. 대괄호. <code>[1, 2, 3]</code>. 내용을 바꿀 수 있다.</p></div><div class="card"><span class="k">묶음</span><b>튜플 tuple</b><p>리스트와 같지만 한번 만들면 바꿀 수 없다. 소괄호. <code>(1, 2, 3)</code></p></div><div class="card"><span class="k">짝 묶음</span><b>딕셔너리 dict</b><p>이름표(키)와 값을 짝지어 담는다. 중괄호. <code>{'name': 'A'}</code></p></div></div></div><figcaption>어떤 종류인지 모를 때는 <code>type(값)</code>으로 물어봅니다. <code>df.shape</code>가 돌려주는 (행 수, 열 수)가 튜플이고, <code>param_grid</code>와 <code>history.history</code>가 딕셔너리입니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">리스트에서 값 꺼내기 · a = [10, 20, 30, 40, 50]</div><div class="dia-b"><svg viewBox="0 0 680 150" role="img" aria-label="리스트의 자리 번호와 잘라내기"><rect x="90" y="50" width="96" height="44" rx="4" fill="var(--surface2)" stroke="var(--line)" stroke-width="1.5"/><text x="138" y="78" font-size="15" font-weight="600" fill="var(--fg)" text-anchor="middle">10</text><text x="138" y="38" font-size="12" fill="var(--accent)" text-anchor="middle">0</text><text x="138" y="114" font-size="12" fill="var(--muted)" text-anchor="middle">-5</text><rect x="190" y="50" width="96" height="44" rx="4" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="238" y="78" font-size="15" font-weight="600" fill="var(--fg)" text-anchor="middle">20</text><text x="238" y="38" font-size="12" fill="var(--accent)" text-anchor="middle">1</text><text x="238" y="114" font-size="12" fill="var(--muted)" text-anchor="middle">-4</text><rect x="290" y="50" width="96" height="44" rx="4" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><text x="338" y="78" font-size="15" font-weight="600" fill="var(--fg)" text-anchor="middle">30</text><text x="338" y="38" font-size="12" fill="var(--accent)" text-anchor="middle">2</text><text x="338" y="114" font-size="12" fill="var(--muted)" text-anchor="middle">-3</text><rect x="390" y="50" width="96" height="44" rx="4" fill="var(--surface2)" stroke="var(--line)" stroke-width="1.5"/><text x="438" y="78" font-size="15" font-weight="600" fill="var(--fg)" text-anchor="middle">40</text><text x="438" y="38" font-size="12" fill="var(--accent)" text-anchor="middle">3</text><text x="438" y="114" font-size="12" fill="var(--muted)" text-anchor="middle">-2</text><rect x="490" y="50" width="96" height="44" rx="4" fill="var(--surface2)" stroke="var(--line)" stroke-width="1.5"/><text x="538" y="78" font-size="15" font-weight="600" fill="var(--fg)" text-anchor="middle">50</text><text x="538" y="38" font-size="12" fill="var(--accent)" text-anchor="middle">4</text><text x="538" y="114" font-size="12" fill="var(--muted)" text-anchor="middle">-1</text><text x="20" y="38" font-size="12" fill="var(--accent)">앞에서 세기</text><text x="20" y="114" font-size="12" fill="var(--muted)">뒤에서 세기</text><text x="238" y="140" font-size="12" fill="var(--accent)" text-anchor="middle">a[1:3] → 1번부터 3번 앞까지</text></svg></div><figcaption>자리 번호는 <b>0부터</b> 셉니다. 세 번째 값은 <code>a[2]</code>입니다. 음수는 뒤에서부터 세어 <code>a[-1]</code>이 마지막 값입니다. 콜론으로 구간을 자르면 <b>끝 번호는 포함하지 않습니다</b>. <code>a[1:3]</code>은 1번과 2번, 곧 [20, 30]입니다. 이렇게 자르는 것을 슬라이싱이라고 합니다. <code>fi[:10]</code>이 "앞에서 10개"인 것도 같은 규칙입니다.</figcaption></figure>
+  <div class="tbl"><table class=""><thead><tr><th>기호</th><th>뜻</th><th>예</th><th>결과</th></tr></thead><tbody>
+    <tr><td><code>+ - * /</code></td><td>더하기, 빼기, 곱하기, 나누기</td><td><code>7 / 2</code></td><td>3.5</td></tr>
+    <tr><td><code>//</code></td><td>나눗셈의 몫</td><td><code>7 // 2</code></td><td>3</td></tr>
+    <tr><td><code>%</code></td><td>나눗셈의 나머지</td><td><code>7 % 2</code></td><td>1</td></tr>
+    <tr><td><code>**</code></td><td>거듭제곱</td><td><code>2 ** 3</code></td><td>8</td></tr>
+    <tr><td><code>==</code></td><td>같은가? (비교)</td><td><code>3 == 3.0</code></td><td>True</td></tr>
+    <tr><td><code>!=</code></td><td>다른가?</td><td><code>3 != 4</code></td><td>True</td></tr>
+    <tr><td><code>&gt; &lt; &gt;= &lt;=</code></td><td>크다, 작다, 크거나 같다, 작거나 같다</td><td><code>5 &gt;= 5</code></td><td>True</td></tr>
+    <tr><td><code>and / or / not</code></td><td>둘 다 참 / 하나라도 참 / 반대로</td><td><code>(3 &gt; 1) and (2 &gt; 5)</code></td><td>False</td></tr>
+  </tbody></table></div>
+<div class="code">
+  <div class="cap"><b>P-1</b><span>값의 종류, 꺼내기, 바꾸기를 한 번씩</span></div>
+  <pre><code>apple = 10; Apple = 20            # 대소문자가 다르면 다른 변수
+print(apple, Apple)
+print(7 // 2, 7 % 2, 2 ** 3, 1 + 2.0)
+
+print('ab' + 'cd', 'ab' * 3, len('hello'), 'Hi'.upper())
+
+a = [10, 20, 30, 40, 50]
+print(a[0], a[2], a[-1], a[1:3], a[:2])
+print(len(a), sum(a), max(a), min(a))
+print([1, 2] + [3, 4], [1, 2] * 2)
+
+d = {'name': 'pump', 'rpm': 1200}
+print(d['rpm'], list(d.keys()))
+
+print(int(1.5), float('3.5'), str(10) + '개', round(3.14159, 2), abs(-3))
+print(True + True, bool(0), bool(5))</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">10 20
+3 1 8 3.0
+abcd ababab 5 HI
+10 30 50 [20, 30] [10, 20]
+5 150 50 10
+[1, 2, 3, 4] [1, 2, 1, 2]
+1200 ['name', 'rpm']
+1 3.5 10개 3.14 3
+2 False True</pre>
+  <div class="why">
+    <ul>
+      <li>정수와 실수를 함께 계산하면 결과는 실수입니다. <code>1 + 2.0</code>이 3이 아니라 3.0입니다.</li>
+      <li>글자끼리 <code>+</code>는 이어 붙이기, 글자 <code>*</code> 숫자는 반복입니다. 리스트도 똑같습니다. 리스트의 <code>+</code>는 덧셈이 아니라 이어 붙이기라는 점이 다음 소절의 출발점입니다.</li>
+      <li>딕셔너리는 번호가 아니라 이름표(키)로 꺼냅니다. <code>d['rpm']</code>.</li>
+      <li><code>int(1.5)</code>는 반올림이 아니라 소수점 아래를 <b>버립니다</b>. 반올림은 <code>round()</code>입니다.</li>
+      <li>True는 1, False는 0으로 계산됩니다. <code>isnull().sum()</code>이 빈칸의 개수가 되는 이유입니다.</li>
+      <li><code>len</code>, <code>sum</code>, <code>max</code>, <code>min</code>, <code>abs</code>, <code>round</code>, <code>type</code>, <code>print</code>는 import 없이 바로 쓰는 기본 함수입니다.</li>
+    </ul>
+</div>
+</div>
+  <h4 class="sub">기초에서 자주 나는 에러</h4>
+  <div class="tbl"><table class=""><thead><tr><th>이렇게 쓰면</th><th>나오는 말</th><th>이유</th></tr></thead><tbody>
+    <tr><td><code>int('hi')</code></td><td><code>ValueError: invalid literal for int() with base 10: 'hi'</code></td><td>숫자 모양이 아닌 글자는 숫자로 바꿀 수 없다</td></tr>
+    <tr><td><code>len(5)</code></td><td><code>TypeError: object of type 'int' has no len()</code></td><td>길이는 글자나 묶음에만 있다. 숫자 하나에는 없다</td></tr>
+    <tr><td><code>t = (1, 2, 3); t[0] = 9</code></td><td><code>TypeError: 'tuple' object does not support item assignment</code></td><td>튜플은 만든 뒤에 바꿀 수 없다</td></tr>
+    <tr><td><code>print('hello")</code></td><td>SyntaxError</td><td>여는 따옴표와 닫는 따옴표의 종류가 다르다. 괄호도 연 만큼 닫아야 한다</td></tr>
+    <tr><td><code>if x = 3</code></td><td>SyntaxError</td><td><code>=</code>는 담기, <code>==</code>가 비교다</td></tr>
+  </tbody></table></div>
+
+  <h3><span class="q">넘파이 · 숫자 배열</span>숫자 묶음을 통째로 계산한다</h3>
+  <div class="plain"><b>계산기와 엑셀에 빗대면</b><p>리스트로 숫자 100개에 2를 곱하려면 하나씩 꺼내 곱해야 합니다. <b>넘파이(numpy)의 배열</b>은 엑셀의 한 열처럼 묶음 전체에 한 번에 계산을 겁니다. 판다스의 표도, scikit-learn의 모델도 속에서는 이 배열로 숫자를 주고받습니다. 스케일링을 거친 X_train이 표가 아니라 배열로 바뀌어 나오는 것도 그래서입니다.</p></div>
+  <figure class="dia"><div class="dia-t">같은 +, 다른 결과</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt">리스트 · 이어 붙인다</div><div class="mtw"><table class="mt"><tr><th class="">[1, 2] + [3, 4]</th></tr><tr><td class="">[1, 2, 3, 4]</td></tr></table></div></div><div class="arr">배열이면</div><div class="panel"><div class="pt">넘파이 배열 · 자리끼리 더한다</div><div class="mtw"><table class="mt"><tr><th class="">np.array([1, 2]) + np.array([3, 4])</th></tr><tr><td class="hl">[4 6]</td></tr></table></div></div></div></div><figcaption>배열의 계산은 같은 자리의 값끼리 이루어집니다. 화면에 찍힐 때 리스트는 쉼표가 있고 배열은 쉼표가 없습니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">reshape(-1, 1) · 한 줄을 세로 한 칸짜리 표로</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt">모양 (4,) · 값 4개가 한 줄</div><div class="mtw"><table class="mt"><tr><th class="">x</th></tr><tr><td class="">[1 2 3 4]</td></tr></table></div></div><div class="arr">.reshape(-1, 1)</div><div class="panel"><div class="pt">모양 (4, 1) · 4행 1열</div><div class="mtw"><table class="mt"><tr><th class="hl"></th></tr><tr><td class="hl">[1]</td></tr><tr><td class="hl">[2]</td></tr><tr><td class="hl">[3]</td></tr><tr><td class="hl">[4]</td></tr></table></div></div></div></div><figcaption><code>shape</code>는 (행 수, 열 수)입니다. scikit-learn의 도구는 "여러 행, 여러 열"짜리 2차원 모양을 받기 때문에, 열이 하나뿐인 데이터는 이렇게 세워서 넣어야 합니다. -1은 "개수는 알아서 맞춰라"는 뜻입니다. 바꾸기 전과 후의 값 개수는 같아야 합니다.</figcaption></figure>
+<div class="code">
+  <div class="cap"><b>N-1</b><span>배열 만들기, 고르기, 요약하기</span></div>
+  <pre><code>import numpy as np
+
+x = np.array([1, 2, 3, 4])
+print(x + x, x * 2, x.shape, x.ndim)
+print(np.arange(0, 10, 2))                 # 0부터 10 앞까지 2씩
+
+b = np.array([[1, 2, 3], [4, 5, 6]])       # 2행 3열
+print(b.shape, b[0, 1], b[-1, -1], b[:, 1])
+print(b.mean(), b.sum(axis=0), b.sum(axis=1), np.sqrt(16))
+
+n = np.array([1.0, np.nan, 3.0])
+print(n.mean(), np.nanmean(n), np.isnan(n))
+n[np.isnan(n)] = 0                         # 빈칸 자리에만 0을 담는다
+print(n)
+
+print(x[x &gt; 2], x[(x &gt; 1) &amp; (x &lt; 4)])      # 조건에 맞는 값만
+print(np.where(x &gt; 2, 'big', 'small'))     # 조건이 참이면 앞, 거짓이면 뒤</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">[2 4 6 8] [2 4 6 8] (4,) 1
+[0 2 4 6 8]
+(2, 3) 2 6 [2 5]
+3.5 [5 7 9] [ 6 15] 4.0
+nan 2.0 [False  True False]
+[1. 0. 3.]
+[3 4] [2 3]
+['small' 'small' 'big' 'big']</pre>
+  <div class="why">
+    <ul>
+      <li><code>np.arange(시작, 끝, 간격)</code>도 리스트 자르기처럼 끝 값을 포함하지 않습니다.</li>
+      <li>2차원 배열은 <code>b[행, 열]</code>로 고릅니다. <code>b[:, 1]</code>은 "모든 행의 1번 열"입니다. 콜론만 쓰면 "전부"입니다.</li>
+      <li><code>axis=0</code>은 세로 방향으로 내려가며(열마다), <code>axis=1</code>은 가로 방향으로(행마다) 계산합니다.</li>
+      <li>빈칸(nan)이 하나라도 있으면 평균이 nan이 됩니다. 빈칸을 빼고 계산하는 것이 <code>np.nanmean</code>입니다.</li>
+      <li><code>x[x &gt; 2]</code>처럼 대괄호에 조건을 넣으면 True인 자리의 값만 골라냅니다. 판다스의 <code>df[조건]</code>과 같은 방식이고, 조건을 이을 때 괄호와 <code>&amp;</code>, <code>|</code>를 쓰는 것도 같습니다.</li>
+      <li><code>np.sqrt</code>는 제곱근입니다. RMSE를 구할 때 <code>np.sqrt(mean_squared_error(...))</code>로 씁니다.</li>
+    </ul>
+</div>
+</div>
+
+  <h3><span class="q">판다스 · 고르기</span>표에서 원하는 칸을 이름으로, 번호로, 조건으로 고른다</h3>
+  <div class="plain"><b>좌석표에 빗대면</b><p>극장 좌석은 "G열 7번"처럼 이름으로 찾을 수도 있고 "앞에서 일곱째 줄, 왼쪽에서 일곱째"처럼 순서로 찾을 수도 있습니다. 판다스에서 이름으로 찾는 것이 <code>loc</code>, 순서 번호로 찾는 것이 <code>iloc</code>입니다. 앞의 i는 integer(정수)입니다.</p></div>
+  <figure class="dia"><div class="dia-t">시리즈와 데이터프레임</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt"><code>df['score']</code> · 열 하나 = 시리즈(Series)</div><div class="mtw"><table class="mt"><tr><th></th><th class="">score</th></tr><tr><td class="ix">0</td><td class="">70</td></tr><tr><td class="ix">1</td><td class="">90</td></tr><tr><td class="ix">2</td><td class="">80</td></tr><tr><td class="ix">3</td><td class="">60</td></tr></table></div></div><div class="arr">대괄호 두 겹이면</div><div class="panel"><div class="pt"><code>df[['name', 'score']]</code> · 표 = 데이터프레임</div><div class="mtw"><table class="mt"><tr><th></th><th class="">name</th><th class="">score</th></tr><tr><td class="ix">0</td><td class="">A</td><td class="">70</td></tr><tr><td class="ix">1</td><td class="">B</td><td class="">90</td></tr><tr><td class="ix">2</td><td class="">C</td><td class="">80</td></tr><tr><td class="ix">3</td><td class="">D</td><td class="">60</td></tr></table></div></div></div></div><figcaption>열 하나를 고르면 한 줄짜리 <b>시리즈</b>가 되고, 열 이름을 리스트로 묶어 넣으면 다시 표가 됩니다. <code>y = df['label']</code>이 시리즈, <code>X</code>가 데이터프레임입니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">loc과 iloc · 같은 칸을 가리키는 두 가지 방법</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt"><code>df.loc[1, 'score']</code> · 이름으로</div><div class="mtw"><table class="mt"><tr><th></th><th class="">name</th><th class="">team</th><th class="">score</th><th class="">age</th></tr><tr><td class="ix">0</td><td class="">A</td><td class="">x</td><td class="">70</td><td class="">31</td></tr><tr><td class="ix">1</td><td class="">B</td><td class="">y</td><td class="hl">90</td><td class="">25</td></tr><tr><td class="ix">2</td><td class="">C</td><td class="">x</td><td class="">80</td><td class="">42</td></tr><tr><td class="ix">3</td><td class="">D</td><td class="">y</td><td class="">60</td><td class="">38</td></tr></table></div></div><div class="arr">둘 다 90</div><div class="panel"><div class="pt"><code>df.iloc[1, 2]</code> · 순서 번호로</div><div class="mtw"><table class="mt"><tr><th></th><th class="">0</th><th class="">1</th><th class="">2</th><th class="">3</th></tr><tr><td class="ix">0</td><td class="">A</td><td class="">x</td><td class="">70</td><td class="">31</td></tr><tr><td class="ix">1</td><td class="">B</td><td class="">y</td><td class="hl">90</td><td class="">25</td></tr><tr><td class="ix">2</td><td class="">C</td><td class="">x</td><td class="">80</td><td class="">42</td></tr><tr><td class="ix">3</td><td class="">D</td><td class="">y</td><td class="">60</td><td class="">38</td></tr></table></div></div></div></div><figcaption>쉼표 앞이 행, 뒤가 열입니다. 구간을 자를 때 한 가지가 다릅니다. <code>loc[0:1]</code>은 이름이라 <b>끝(1)을 포함</b>하고, <code>iloc[0:1]</code>은 번호라 끝을 포함하지 않습니다.</figcaption></figure>
+<div class="code">
+  <div class="cap"><b>D-1</b><span>이름으로, 번호로, 조건으로 고르기</span></div>
+  <pre><code>import pandas as pd
+df = pd.DataFrame({'name': ['A', 'B', 'C', 'D'], 'team': ['x', 'y', 'x', 'y'],
+                   'score': [70, 90, 80, 60], 'age': [31, 25, 42, 38]})
+
+print(df.loc[1, 'score'], df.iloc[1, 2])
+print(df.loc[0:1, ['name', 'score']])           # 이름: 0행부터 1행까지
+print(df.iloc[0:1, 0:2])                        # 번호: 0행만, 0~1열
+
+print(df[df['score'] &gt;= 80])                    # 조건 하나
+print(df[(df['score'] &gt;= 70) &amp; (df['team'] == 'x')])   # 조건 둘</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">90 90
+  name  score
+0    A     70
+1    B     90
+  name team
+0    A    x
+  name team  score  age
+1    B    y     90   25
+2    C    x     80   42
+  name team  score  age
+0    A    x     70   31
+2    C    x     80   42</pre>
+  <div class="why"><p><code>df[조건]</code>은 조건이 True인 행만 남깁니다. 문항 5에서 이상치 행을 고르고, 회귀 샘플에서 <code>df[df.Speed_Per_Hour &lt; 300]</code>로 남길 행을 고른 것이 이 문법입니다. <code>pd.DataFrame({열 이름: 값들})</code>은 딕셔너리로 표를 만드는 방법이고, 문항 11의 변수중요도 표가 이렇게 만들어집니다.</p></div>
+</div>
+
+  <h3><span class="q">판다스 · 요약하고 모양 바꾸기</span>줄 세우고, 묶어서 세고, 표를 돌린다</h3>
+  <div class="plain"><b>성적표에 빗대면</b><p>성적표를 받으면 점수순으로 줄을 세워 보고, 반별 평균을 내 보고, 과목을 가로로 펼친 표로 다시 정리해 봅니다. 판다스의 정렬, 집계, 피벗이 이 세 가지입니다.</p></div>
+  <figure class="dia"><div class="dia-t">groupby · 쪼개고, 계산하고, 합친다</div><div class="dia-b"><div class="chain"><div class="panel"><div class="pt">① 원래 표</div><div class="mtw"><table class="mt"><tr><th class="">team</th><th class="">score</th></tr><tr><td class="">x</td><td class="">70</td></tr><tr><td class="">y</td><td class="">90</td></tr><tr><td class="">x</td><td class="">80</td></tr><tr><td class="">y</td><td class="">60</td></tr></table></div></div><div class="panel"><div class="pt">② team 값이 같은 것끼리 쪼갠다</div><div class="mtw"><table class="mt"><tr><th class="">team</th><th class="">score</th></tr><tr><td class="hl">x</td><td class="hl">70</td></tr><tr><td class="hl">x</td><td class="hl">80</td></tr></table></div><div style="height:6px"></div><div class="mtw"><table class="mt"><tr><th class="">team</th><th class="">score</th></tr><tr><td class="">y</td><td class="">90</td></tr><tr><td class="">y</td><td class="">60</td></tr></table></div></div><div class="panel"><div class="pt">③ 묶음마다 평균을 내 다시 합친다</div><div class="mtw"><table class="mt"><tr><th class="">team</th><th class="hl">score</th></tr><tr><td class="">x</td><td class="hl">75.0</td></tr><tr><td class="">y</td><td class="hl">75.0</td></tr></table></div></div></div></div><figcaption><code>df.groupby('team')['score'].mean()</code>이 이 세 단계를 한 줄로 합니다. <code>pivot_table</code>은 같은 일을 표 모양으로 돌려주고, <code>melt</code>는 반대로 가로로 펼쳐진 열들을 세로로 길게 녹입니다.</figcaption></figure>
+<div class="code">
+  <div class="cap"><b>D-2</b><span>정렬, 이름 바꾸기, 집계, 피벗</span></div>
+  <pre><code>print(df.sort_values('score', ascending=False).head(2))     # 큰 순서로 위 2줄
+print(df.rename(columns={'score': 'point'}).columns.tolist())
+
+print(df['score'].count(), df['score'].mean(), df['score'].median(),
+      df['score'].std().round(2), df['score'].var().round(2))
+
+print(df.groupby('team')['score'].agg(['mean', 'max']))    # 묶음마다 평균과 최대
+print(df.pivot_table(index='team', values='score', aggfunc='mean'))
+print(pd.melt(df, id_vars='name', value_vars=['score', 'age']).head(3))</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">  name team  score  age
+1    B    y     90   25
+2    C    x     80   42
+['name', 'team', 'point', 'age']
+4 75.0 75.0 12.91 166.67
+      mean  max
+team
+x     75.0   80
+y     75.0   90
+      score
+team
+x      75.0
+y      75.0
+  name variable  value
+0    A    score     70
+1    B    score     90
+2    C    score     80</pre>
+  <div class="why">
+    <ul>
+      <li><code>count</code>는 빈칸이 아닌 값의 개수, <code>std</code>는 표준편차(값들이 평균에서 보통 떨어진 폭), <code>var</code>는 분산(표준편차의 제곱)입니다. 12.91 × 12.91 = 166.67.</li>
+      <li><code>rename(columns={옛 이름: 새 이름})</code>은 딕셔너리로 짝을 지어 줍니다.</li>
+      <li><code>agg([...])</code>는 여러 계산을 한 번에 시킵니다.</li>
+      <li>이 함수들은 새 표를 돌려줄 뿐 원래 표를 바꾸지 않습니다. 결과를 쓰려면 <code>df = df.sort_values(...)</code>처럼 다시 담습니다.</li>
+    </ul>
+</div>
+</div>
+
+  <h3><span class="q">판다스 · 합치기와 날짜</span>두 표를 붙이고, 글자로 된 날짜를 진짜 날짜로 바꾼다</h3>
+  <figure class="dia"><div class="dia-t">concat과 merge</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">쌓기</span><b>pd.concat([위 표, 아래 표])</b><p>같은 모양의 표를 위아래로 이어 붙인다. 1월 기록 아래에 2월 기록을 붙이는 일.</p></div><div class="card"><span class="k">맞붙이기</span><b>pd.merge(왼쪽, 오른쪽, on='name')</b><p>두 표에 공통으로 있는 열(키)을 기준으로 옆으로 맞붙인다. 학생 명단에 주소록을 붙이는 일.</p></div><div class="card"><span class="k">교집합</span><b>how='inner'</b><p>양쪽 모두에 있는 키만 남긴다. 기본값.</p></div><div class="card"><span class="k">왼쪽 기준</span><b>how='left'</b><p>왼쪽 표의 행은 전부 남기고, 오른쪽에 짝이 없으면 NaN으로 둔다.</p></div></div></div></figure>
+  <figure class="dia"><div class="dia-t">merge(df, e, on='name') · 키가 같은 행끼리 짝짓는다</div><div class="dia-b"><div class="chain"><div class="panel"><div class="pt">왼쪽 df</div><div class="mtw"><table class="mt"><tr><th class="">name</th><th class="">score</th></tr><tr><td class="hl">A</td><td class="hl">70</td></tr><tr><td class="hl">B</td><td class="hl">90</td></tr><tr><td class="">C</td><td class="">80</td></tr><tr><td class="">D</td><td class="">60</td></tr></table></div></div><div class="panel"><div class="pt">오른쪽 e</div><div class="mtw"><table class="mt"><tr><th class="">name</th><th class="">city</th></tr><tr><td class="hl">A</td><td class="hl">서울</td></tr><tr><td class="hl">B</td><td class="hl">부산</td></tr><tr><td class="">E</td><td class="">대구</td></tr></table></div></div><div class="panel"><div class="pt">how='inner' · 둘 다 있는 A, B만</div><div class="mtw"><table class="mt"><tr><th class="">name</th><th class="">score</th><th class="">city</th></tr><tr><td class="">A</td><td class="">70</td><td class="">서울</td></tr><tr><td class="">B</td><td class="">90</td><td class="">부산</td></tr></table></div></div><div class="panel"><div class="pt">how='left' · 왼쪽 전부, 짝 없으면 NaN</div><div class="mtw"><table class="mt"><tr><th class="">name</th><th class="">score</th><th class="">city</th></tr><tr><td class="">A</td><td class="">70</td><td class="">서울</td></tr><tr><td class="">B</td><td class="">90</td><td class="">부산</td></tr><tr><td class="">C</td><td class="">80</td><td class="">NaN</td></tr><tr><td class="">D</td><td class="">60</td><td class="">NaN</td></tr></table></div></div></div></div><figcaption>E는 왼쪽 표에 없어서 두 경우 모두 빠집니다. left로 합친 뒤 생긴 NaN은 결측치이므로 문항 6의 방법으로 처리합니다.</figcaption></figure>
+<div class="code">
+  <div class="cap"><b>D-3</b><span>합치기, 날짜 바꾸기, 저장하기</span></div>
+  <pre><code>e = pd.DataFrame({'name': ['A', 'B', 'E'], 'city': ['서울', '부산', '대구']})
+print(pd.concat([df.head(2), df.tail(1)]).reset_index(drop=True))
+print(pd.merge(df, e, on='name', how='inner'))
+
+s = pd.to_datetime(pd.Series(['2026-03-01 08:30:00', '2026-03-07 23:10:00']))
+print(s.dt.year.tolist(), s.dt.month.tolist(), s.dt.hour.tolist(), s.dt.dayofweek.tolist())
+
+df['age'] = df['age'].astype(float)          # 자료형 바꾸기
+df.to_csv('result.csv', index=False)         # 파일로 저장</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">  name team  score  age
+0    A    x     70   31
+1    B    y     90   25
+2    D    y     60   38
+  name team  score  age city
+0    A    x     70   31   서울
+1    B    y     90   25   부산
+[2026, 2026] [3, 3] [8, 23] [6, 5]</pre>
+  <div class="why">
+    <ul>
+      <li>CSV에서 읽은 날짜는 그냥 글자(object)입니다. <code>pd.to_datetime</code>으로 바꾸면 <code>.dt.year</code>, <code>.dt.hour</code>, <code>.dt.dayofweek</code>(월요일 0 ~ 일요일 6)처럼 조각을 꺼낼 수 있습니다. 시각에서 "몇 시", "무슨 요일" 열을 새로 만들어 모델의 재료로 쓰는 일이 흔합니다. 회귀 샘플의 Hour, Weekday 열이 그렇게 만들어진 열입니다.</li>
+      <li><code>concat</code> 뒤에는 행 번호가 뒤섞이므로 <code>reset_index(drop=True)</code>로 다시 매깁니다.</li>
+      <li><code>to_csv(..., index=False)</code>는 행 번호를 파일에 쓰지 않겠다는 뜻입니다. 생략하면 번호가 열 하나로 함께 저장됩니다.</li>
+    </ul>
+</div>
+</div>
+
+  <div class="summary"><h4>기초 다지기 핵심 요약</h4><ol>
+    <li><b>01</b><span>자리 번호는 0부터 세고, 구간을 자를 때 끝 번호는 포함하지 않는다.</span></li>
+    <li><b>02</b><span>리스트의 +는 이어 붙이기, 넘파이 배열의 +는 자리끼리 더하기다.</span></li>
+    <li><b>03</b><span>loc은 이름으로, iloc은 순서 번호로 고른다. 쉼표 앞이 행, 뒤가 열이다.</span></li>
+    <li><b>04</b><span>groupby는 쪼개고 계산하고 합친다. merge는 공통 열을 기준으로 맞붙인다.</span></li>
+  </ol></div>
+</section>
+
 <section class="part" id="p1">
   <div class="part-head">
     <span class="eyebrow">1부 · 데이터 분석 · 문항 1~4</span>
@@ -599,6 +833,45 @@ sns.heatmap(df.corr(numeric_only=True), annot=True, cmap='coolwarm')</code></pre
 </div>
   <div class="note"><div class="ic">?</div><p><b>그래프를 읽고 답을 적는 문항이 있습니다.</b> 회귀 샘플 3번은 countplot을 그린 뒤 "가장 많이 찾는 목적지"를 <code>답안3 = '경기도'</code>처럼 적게 합니다. 막대가 비슷해 눈으로 가리기 어려우면 <code>value_counts()</code>로 숫자를 확인하고 적습니다.</p></div>
 
+  <h3><span class="q">문항 3~4 · 그래프 더 보기</span>열의 종류를 먼저 보고 그래프를 고른다</h3>
+  <p>그래프 문항은 두 가지를 묻습니다. 지시한 그래프를 <b>그리는</b> 것, 그리고 그려진 그래프를 <b>읽는</b> 것입니다. 둘 다 출발점은 같습니다. 축에 올리는 열이 글자처럼 보기가 정해진 <b>범주형</b>인지, 크기를 잴 수 있는 <b>수치형</b>인지를 먼저 봅니다.</p>
+  <figure class="dia"><div class="dia-t">열의 종류와 개수로 고르는 표</div><div class="dia-b">  <div class="tbl"><table class=""><thead><tr><th></th><th>열 하나</th><th>열 둘 이상</th></tr></thead><tbody>
+    <tr><td><b>범주형</b> (글자, 등급, 0/1)</td><td><code>countplot</code> · 범주마다 몇 건</td><td>범주형 × 수치형: <code>boxplot</code>, <code>violinplot</code>, <code>barplot</code>, <code>catplot</code></td></tr>
+    <tr><td><b>수치형</b> (크기가 있는 숫자)</td><td><code>histplot</code> · 어디에 몰려 있나</td><td>수치형 × 수치형: <code>scatterplot</code>, <code>jointplot</code>, <code>lmplot</code></td></tr>
+    <tr><td><b>순서 · 시간</b></td><td></td><td><code>lineplot</code> · 시간이나 순서에 따른 변화</td></tr>
+    <tr><td><b>수치형 전부</b></td><td></td><td><code>heatmap</code>(상관), <code>pairplot</code>(모든 쌍)</td></tr>
+  </tbody></table></div>
+</div><figcaption>그래프를 읽을 때도 같은 순서입니다. 가로축과 세로축에 무엇이 올라가 있는지부터 확인합니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">앞에서 다루지 않은 여섯 가지</div><div class="dia-b"><div class="cards"><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><path d="M35 8 C25 20 18 28 24 38 C30 48 26 56 35 64 C44 56 40 48 46 38 C52 28 45 20 35 8 Z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/><path d="M85 14 C80 26 70 30 76 40 C80 48 80 54 85 60 C90 54 90 48 94 40 C100 30 90 26 85 14 Z" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.5"/></svg><span class="k">분포의 모양</span><b>violinplot</b><p>boxplot과 같은 자리에 쓴다. 폭이 넓은 곳이 값이 몰린 곳. 이상치를 점으로 따로 찍지 <b>않는다</b>.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><line x1="10" y1="60" x2="110" y2="60" stroke="var(--line)"/><polyline fill="none" stroke="var(--accent)" stroke-width="2.5" points="14,50 34,42 54,46 74,28 94,22 108,14"/><circle cx="14" cy="50" r="3" fill="var(--accent)"/><circle cx="34" cy="42" r="3" fill="var(--accent)"/><circle cx="54" cy="46" r="3" fill="var(--accent)"/><circle cx="74" cy="28" r="3" fill="var(--accent)"/><circle cx="94" cy="22" r="3" fill="var(--accent)"/><circle cx="108" cy="14" r="3" fill="var(--accent)"/></svg><span class="k">추이</span><b>lineplot</b><p>시간이나 순서에 따른 변화를 선으로 잇는다. 순서가 없는 범주를 가로축에 놓으면 선이 뜻을 잃는다.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><circle cx="18" cy="50" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="26" cy="56" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="34" cy="40" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="44" cy="48" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="52" cy="34" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="60" cy="40" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="70" cy="26" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="80" cy="34" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="90" cy="18" r="2.5" fill="var(--accent)" opacity=".7"/><circle cx="102" cy="22" r="2.5" fill="var(--accent)" opacity=".7"/><line x1="12" y1="56" x2="108" y2="16" stroke="var(--warn)" stroke-width="2.5"/></svg><span class="k">관계 + 추세</span><b>lmplot</b><p>산점도에 추세선(회귀선)을 함께 그린다. 두 축 모두 수치형이어야 한다.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><rect x="12" y="6" width="46" height="27" fill="var(--surface2)" stroke="var(--line)"/><rect x="62" y="6" width="46" height="27" fill="var(--surface2)" stroke="var(--line)"/><rect x="12" y="37" width="46" height="27" fill="var(--surface2)" stroke="var(--line)"/><rect x="62" y="37" width="46" height="27" fill="var(--surface2)" stroke="var(--line)"/><circle cx="70" cy="26" r="2" fill="var(--accent)"/><circle cx="78" cy="20" r="2" fill="var(--accent)"/><circle cx="88" cy="14" r="2" fill="var(--accent)"/><circle cx="98" cy="10" r="2" fill="var(--accent)"/><circle cx="22" cy="60" r="2" fill="var(--accent)"/><circle cx="30" cy="54" r="2" fill="var(--accent)"/><circle cx="40" cy="48" r="2" fill="var(--accent)"/><circle cx="50" cy="42" r="2" fill="var(--accent)"/><polyline fill="none" stroke="var(--accent)" stroke-width="1.5" points="16,30 26,18 36,12 46,22 56,30"/><polyline fill="none" stroke="var(--accent)" stroke-width="1.5" points="66,60 76,50 86,42 96,52 106,60"/></svg><span class="k">전체 훑기</span><b>pairplot</b><p>수치형 열의 모든 쌍을 한 번에 그린다. 글자 열은 자동으로 빠진다. 열이 많으면 느리다.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><rect x="8" y="8" width="48" height="54" fill="var(--surface2)" stroke="var(--line)"/><rect x="64" y="8" width="48" height="54" fill="var(--surface2)" stroke="var(--line)"/><rect x="18" y="28" width="12" height="20" fill="var(--accent-soft)" stroke="var(--accent)"/><rect x="36" y="20" width="12" height="24" fill="var(--accent-soft)" stroke="var(--accent)"/><rect x="74" y="34" width="12" height="16" fill="var(--accent-soft)" stroke="var(--accent)"/><rect x="92" y="24" width="12" height="22" fill="var(--accent-soft)" stroke="var(--accent)"/></svg><span class="k">통합</span><b>catplot</b><p>범주형 그래프의 통합판. <code>kind='box'</code>처럼 종류를 고르고 <code>col=</code>로 칸을 나눈다.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><rect x="30" y="6" width="29" height="28" fill="var(--accent)"/><rect x="61" y="6" width="29" height="28" fill="var(--accent)" opacity=".15"/><rect x="30" y="36" width="29" height="28" fill="var(--accent)" opacity=".2"/><rect x="61" y="36" width="29" height="28" fill="var(--accent)" opacity=".75"/></svg><span class="k">분류 결과</span><b>heatmap(혼동 행렬)</b><p><code>confusion_matrix</code> 결과를 색으로 칠한다. 대각선이 맞힌 것, 나머지가 틀린 것.</p></div></div></div></figure>
+<div class="code">
+  <div class="cap"><b>A-3</b><span>여섯 가지의 쓰는 모양 (그림은 싣지 않습니다)</span></div>
+  <pre><code>sns.violinplot(data=df, x='op_state', y='vib_rms_mms')
+sns.lineplot(data=df, x='hour', y='flow_m3h')                   # 가로축은 순서가 있는 열
+sns.lmplot(data=df, x='rpm', y='flow_m3h')                      # ax= 를 받지 않는다
+sns.pairplot(data=df, vars=['rpm', 'flow_m3h', 'vib_rms_mms'], hue='label')
+sns.catplot(data=df, x='op_state', y='vib_rms_mms', kind='box', col='label')
+sns.histplot(data=df, x='vib_rms_mms', kde=True, bins=30)       # kde=True 면 밀도 곡선이 겹쳐진다
+
+corr = df.corr(numeric_only=True)                               # heatmap 앞에 반드시
+sns.heatmap(corr, annot=True, fmt='.2f', cmap='coolwarm')
+
+from sklearn.metrics import confusion_matrix
+cm = confusion_matrix(y_valid, y_pred)
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')              # fmt='d' 는 정수로 적으라는 뜻</code></pre>
+</div>
+  <h4 class="sub">그리거나 읽을 때 걸려 넘어지는 자리</h4>
+  <div class="tbl"><table class=""><thead><tr><th>헷갈리는 것</th><th>바른 이해</th></tr></thead><tbody>
+    <tr><td>countplot과 barplot</td><td>countplot은 <b>개수</b>를 센다. 세로축 열이 필요 없다. barplot은 범주별 <b>평균</b>이다. 세로축에 수치형 열이 있어야 한다. 막대 위의 짧은 선은 오차 막대다</td></tr>
+    <tr><td>boxplot과 violinplot</td><td>둘 다 범주별 분포. 이상치를 점으로 찍는 것은 boxplot뿐이다</td></tr>
+    <tr><td>scatterplot과 jointplot</td><td>scatterplot은 점만 찍는다. 가장자리에 각 축의 분포까지 보여 주는 것이 jointplot이다. jointplot은 열 둘까지만 다룬다. 셋 이상은 pairplot</td></tr>
+    <tr><td>heatmap에 표를 그대로 넣기</td><td>heatmap은 상관을 계산해 주지 않는다. <code>df.corr(numeric_only=True)</code>를 먼저 구해 넣는다. 대각선은 자기 자신과의 상관이라 언제나 1.0이다</td></tr>
+    <tr><td><code>annot=True</code>를 빠뜨림</td><td>칸에 숫자가 찍히지 않는다. 혼동 행렬은 <code>fmt='d'</code>를 주지 않으면 1.8e+04 같은 표기로 찍힌다</td></tr>
+    <tr><td>hue와 col</td><td><code>hue=</code>는 한 칸 안에서 <b>색</b>으로 나눈다. <code>col=</code>는 <b>칸을 따로</b> 만들어 나눈다</td></tr>
+    <tr><td><code>ax=</code>가 안 먹는 함수</td><td>catplot, lmplot, jointplot, pairplot은 그림판을 스스로 만든다. subplots의 칸에 넣을 수 없다</td></tr>
+    <tr><td>boxplot의 x와 y</td><td>가로축에 범주형, 세로축에 수치형. 바꿔 넣으면 눕혀서 그려진다</td></tr>
+    <tr><td>histplot의 치우침</td><td>꼬리가 오른쪽으로 길게 늘어지면 "오른쪽으로 치우쳤다"고 한다. 봉우리가 왼쪽에 있어도 이름은 꼬리 쪽을 따른다</td></tr>
+  </tbody></table></div>
+
   <div class="summary"><h4>1부 핵심 요약</h4><ol>
     <li><b>01</b><span>별칭은 지정된 그대로 쓴다. 설치 이름과 import 이름은 다를 수 있다.</span></li>
     <li><b>02</b><span><code>info()</code>는 자료형과 결측, <code>describe()</code>는 숫자 열의 통계를 준다.</span></li>
@@ -717,6 +990,22 @@ lower_fence 5.295 · upper_fence 243.655
   </div>
 </div>
 
+  <h4 class="sub">또 하나의 기준 · 표준점수(Z-score)</h4>
+  <p>이상치를 가리는 방법은 IQR만이 아닙니다. 값이 평균에서 표준편차의 몇 배 떨어져 있는지를 재는 <b>Z-score</b>도 씁니다. 문항 9의 StandardScaler가 하는 계산과 같습니다. 이 배수의 절댓값이 정해 둔 선(흔히 1.96 또는 3)을 넘으면 이상치로 봅니다.</p>
+<div class="code">
+  <div class="cap"><b>B-1c</b><span>Z-score로 이상치 세기</span></div>
+  <pre><code>f = df['flow_m3h']
+z = (f - f.mean()) / f.std()                 # 평균에서 표준편차의 몇 배 떨어졌나
+
+print(round(f.mean(), 2), round(f.std(), 2))
+print((z.abs() &gt; 1.96).sum(), (z.abs() &gt; 3).sum())
+
+df['outlier'] = np.where(z.abs() &gt; 3, 1, 0)  # 이상치면 1, 아니면 0 표시</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">118.93 52.37
+1828 2</pre>
+  <div class="why"><p>같은 유량 열에서 기준에 따라 이상치의 수가 크게 달라집니다. 1.96배를 넘는 값은 1,828행, 3배를 넘는 값은 2행, 앞의 IQR 울타리 밖은 313행입니다. 어느 기준이 옳다기보다 <b>문항이 정한 기준을 그대로</b> 쓰는 것이 답입니다. <code>z.abs()</code>는 음수의 부호를 떼어 위아래 양쪽을 한 번에 봅니다.</p></div>
+</div>
   <div class="note"><div class="ic">?</div><p><b>어느 열에 거느냐가 중요합니다.</b> 같은 울타리를 진동 열에 걸면 3,499행이 지워지는데, 그중 230행이 맞혀야 할 label 1입니다. 유량 열의 313행 가운데 label 1은 2행뿐입니다. 시험에서는 가이드가 열을 정해 주지만, 실제 일에서는 지우기 전에 무엇이 지워지는지 먼저 셉니다.</p></div>
 
     <figure class="dia"><div class="dia-t">axis: 가로줄을 지울까, 세로줄을 지울까</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt"><code>df.drop(1, axis=0)</code> · 1번 행을 지운다</div><div class="mtw"><table class="mt"><tr><th></th><th class="">유량</th><th class="">진동</th><th class="">이름</th></tr><tr><td class="ix">0</td><td class="">120</td><td class="">2.5</td><td class="">A</td></tr><tr><td class="ix">1</td><td class="hl">900</td><td class="hl">2.6</td><td class="hl">B</td></tr><tr><td class="ix">2</td><td class="">140</td><td class="">2.4</td><td class="">C</td></tr></table></div></div><div class="arr">같은 표</div><div class="panel"><div class="pt"><code>df.drop('이름', axis=1)</code> · 이름 열을 지운다</div><div class="mtw"><table class="mt"><tr><th></th><th class="">유량</th><th class="">진동</th><th class="hl">이름</th></tr><tr><td class="ix">0</td><td class="">120</td><td class="">2.5</td><td class="hl">A</td></tr><tr><td class="ix">1</td><td class="">900</td><td class="">2.6</td><td class="hl">B</td></tr><tr><td class="ix">2</td><td class="">140</td><td class="">2.4</td><td class="hl">C</td></tr></table></div></div></div></div><figcaption>색칠한 부분이 사라집니다. 0은 행, 1은 열입니다. 헷갈리면 <code>drop(columns=[...])</code>처럼 이름으로 적습니다. 이상치 행을 지우는 것과 불필요한 열을 지우는 것이 한 문항에 함께 나옵니다.</figcaption></figure>
@@ -773,6 +1062,23 @@ label                 0
 결측치 처리 후
  0 (62886, 9)</pre>
   <div class="why"><p>여섯 열이 같은 1,601행에서 함께 비어 있으므로 지워지는 행도 1,601행입니다. 64,487 - 1,601 = 62,886행이 남습니다.</p></div>
+</div>
+<div class="code">
+  <div class="cap"><b>B-1d</b><span>숫자 열은 중앙값으로, 글자 열은 최빈값으로 한꺼번에 채우기</span></div>
+  <pre><code>m = pd.DataFrame({'num': [1.0, None, 3.0, 8.0], 'cat': ['a', None, 'a', 'b']})
+
+for c in m.select_dtypes(include='number').columns:     # 숫자 열을 하나씩 꺼내며
+    m[c] = m[c].fillna(m[c].median())
+for c in m.select_dtypes(include='object').columns:     # 글자 열을 하나씩 꺼내며
+    m[c] = m[c].fillna(m[c].mode()[0])
+print(m)</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">   num cat
+0  1.0   a
+1  3.0   a
+2  3.0   a
+3  8.0   b</pre>
+  <div class="why"><p><code>for 이름 in 묶음:</code>은 "묶음에서 하나씩 꺼내 이름에 담고, 아래 들여 쓴 줄을 되풀이하라"는 뜻입니다. 열이 수십 개여도 두 묶음으로 나눠 한 번에 처리할 수 있습니다. 숫자 열의 빈칸에는 1, 3, 8의 중앙값 3이, 글자 열의 빈칸에는 가장 흔한 a가 들어갔습니다. 들여쓰기(빈칸 네 개)가 되풀이할 범위를 정합니다.</p></div>
 </div>
   <div class="note"><div class="ic">!</div><p><b>결과를 변수에 받아야 반영됩니다.</b> <code>df.dropna()</code>만 쓰면 원본은 그대로입니다. <code>data_na = data_temp.dropna()</code>처럼 가이드가 지정한 새 변수에 받거나 <code>inplace=True</code>를 씁니다. 둘을 함께 쓰면 변수에 None이 들어갑니다.</p></div>
 
@@ -864,6 +1170,7 @@ dtypes: bool(2), float64(7), int64(1)
   </div>
 </div>
 
+  <figure class="dia"><div class="dia-t">drop_first=True · 열 하나를 덜어 낸다</div><div class="dia-b"><div class="pair"><div class="panel"><div class="pt">기본 · 범주 3가지면 열 3개</div><div class="mtw"><table class="mt"><tr><th class="">color</th><th class="">blue</th><th class="">green</th><th class="">red</th></tr><tr><td class="">red</td><td class="">0</td><td class="">0</td><td class="">1</td></tr><tr><td class="">blue</td><td class="">1</td><td class="">0</td><td class="">0</td></tr><tr><td class="">green</td><td class="">0</td><td class="">1</td><td class="">0</td></tr></table></div></div><div class="arr">drop_first=True</div><div class="panel"><div class="pt">첫 열(blue)을 뺀다 · 열 2개</div><div class="mtw"><table class="mt"><tr><th class="">color</th><th class="">green</th><th class="">red</th></tr><tr><td class="">red</td><td class="">0</td><td class="">1</td></tr><tr><td class="hl">blue</td><td class="hl"><b>0</b></td><td class="hl"><b>0</b></td></tr><tr><td class="">green</td><td class="">1</td><td class="">0</td></tr></table></div></div></div></div><figcaption>green도 red도 0이면 blue라는 것을 알 수 있으니 열 하나는 없어도 정보가 그대로입니다. 세 열을 다 두면 "한 열은 나머지 둘로 완전히 정해지는" 겹침이 생기는데, 직선으로 계산하는 모델(선형 회귀, 로지스틱 회귀)은 이런 겹침에 약합니다. 나무 계열 모델에서는 어느 쪽이든 괜찮습니다. 문항이 옵션을 지정하면 그대로 따릅니다. <code>dtype=int</code>를 함께 주면 True/False 대신 1/0으로 나옵니다.</figcaption></figure>
   <div class="note"><div class="ic">!</div><p><b>"불필요한 컬럼을 삭제하세요"의 속뜻.</b> 연습 데이터의 <code>event_type</code>은 label이 1인 행에만 값이 채워지는 열입니다. 남겨 두면 모델이 정답을 그대로 보고 맞힙니다. 이렇게 정답의 정보가 입력에 섞여 드는 것을 <b>데이터 누수</b>라고 합니다. 시각 열 <code>timestamp</code>처럼 행마다 값이 다른 열도 인코딩 전에 지웁니다.</p></div>
 
   <h3><span class="q">문항 8 · Train/Test 데이터셋 분할</span>공부할 문제와 시험 볼 문제를 가른다</h3>
@@ -1015,6 +1322,7 @@ round(np.max(X_valid))                # 결과값을 묻는 문항이 뒤따른�
 </div>
 
   <h3><span class="q">문항 9와 10 사이</span>모델에 넣기 전에 다섯 가지를 확인한다</h3>
+  <figure class="dia"><div class="dia-t">전처리의 순서 · 시험의 흐름과 원칙의 흐름</div><div class="dia-b"><div class="lane"><b>시험의 흐름<small>문항 순서</small></b><div class="flow"><div class="step"><b>이상치</b></div><div class="step"><b>결측</b></div><div class="step"><b>인코딩</b></div><div class="step"><b>나누기</b></div><div class="step"><b>스케일링</b><span>train만 fit</span></div></div></div><div class="lane"><b>원칙의 흐름<small>더 엄격하게</small></b><div class="flow"><div class="step"><b>나누기</b><span>가장 먼저</span></div><div class="step"><b>결측 · 인코딩</b><span>train에서 기준을 잡는다</span></div><div class="step"><b>스케일링</b><span>train만 fit</span></div></div></div></div><figcaption>빈칸을 평균으로 메울 때 그 평균도 훈련 데이터에서만 구하는 것이 엄격한 원칙입니다. 시험은 문항 순서대로 결측과 인코딩을 먼저 하고 나눕니다. 어느 흐름에서든 변하지 않는 것은 하나입니다. <b>스케일러의 fit은 나눈 뒤, 훈련 데이터에만</b> 합니다.</figcaption></figure>
   <p>전처리 문항을 다 풀었는데 모델 문항에서 에러가 나면, 원인은 거의 항상 앞에 있습니다. 넘어가기 전에 아래를 봅니다.</p>
   <div class="tbl"><table>
     <thead><tr><th>확인할 것</th><th>확인하는 코드</th><th>어긋나면 생기는 일</th></tr></thead>
@@ -1200,7 +1508,78 @@ RandomForestClassifier(max_depth=20, random_state=7)
     <div class="plain"><b>오븐 설정에 빗대면</b><p>빵을 굽기 전에 온도와 시간은 사람이 정합니다. 모델에도 학습 전에 사람이 정해 줘야 하는 값이 있고, 이를 <b>하이퍼파라미터</b>라고 합니다. 나무의 깊이, 나무의 수가 그런 값입니다. 어떤 조합이 좋은지 모를 때는 후보를 전부 구워 보고 가장 맛있는 것을 고릅니다. 이 일을 대신해 주는 것이 <code>GridSearchCV</code>입니다.</p></div>
   <figure class="dia"><div class="dia-t">교차검증 cv=3 · 한 조합을 세 번 채점한다</div><div class="dia-b"><div class="lane"><b>1회차</b><div class="split"><div class="b" style="width:33.34%">채점</div><div class="a" style="width:33.34%">학습</div><div class="a" style="width:33.34%">학습</div></div></div><div class="lane"><b>2회차</b><div class="split"><div class="a" style="width:33.34%">학습</div><div class="b" style="width:33.34%">채점</div><div class="a" style="width:33.34%">학습</div></div></div><div class="lane"><b>3회차</b><div class="split"><div class="a" style="width:33.34%">학습</div><div class="a" style="width:33.34%">학습</div><div class="b" style="width:33.34%">채점</div></div></div></div><figcaption>훈련 데이터를 세 조각으로 나눠, 조각 하나씩을 돌아가며 채점용으로 씁니다. 세 번의 점수를 평균 낸 것이 그 조합의 점수입니다. 한 번만 채점하면 우연히 쉬운 조각이 걸릴 수 있기 때문입니다. 검증 데이터(X_valid)는 이 과정에 쓰지 않고 마지막 평가를 위해 남겨 둡니다.</figcaption></figure>
 
-<h3><span class="q">문항 11 · 모델 성능 개선 및 그래픽 출력</span>변수중요도를 막대로 그린다</h3>
+  <h3><span class="q">문항 10 · 더 알아 둘 모델</span>직선으로 푸는 모델, 그리고 나무를 엮는 두 가지 방법</h3>
+  <p>문항이 지정하는 모델은 나무 두 가지에 그치지 않습니다. 이름을 보고 무엇을 하는 모델인지, 분류용인지 회귀용인지 알아볼 수 있으면 쓰는 법은 모두 같습니다.</p>
+  <figure class="dia"><div class="dia-t">모델 지도</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">회귀</span><b>LinearRegression</b><p>점들 사이를 가장 가깝게 지나는 직선을 찾는다. 설정할 것이 거의 없어 기준선으로 쓴다.</p></div><div class="card"><span class="k">회귀</span><b>Ridge · Lasso</b><p>선형 회귀에 "가중치를 너무 키우지 말라"는 제약을 더한 것. <code>alpha</code>가 클수록 제약이 세다. Lasso는 쓸모없는 열의 가중치를 아예 0으로 만든다.</p></div><div class="card"><span class="k">분류</span><b>LogisticRegression</b><p><b>이름은 회귀지만 분류 모델</b>이다. 직선 계산 결과를 0과 1 사이 확률로 바꾸고 0.5를 기준으로 가른다.</p></div><div class="card"><span class="k">분류 · 회귀</span><b>DecisionTree</b><p>질문을 거듭해 가른다. 깊으면 외운다.</p></div><div class="card"><span class="k">분류 · 회귀</span><b>RandomForest</b><p>나무 여러 그루를 <b>나란히</b> 세워 투표시킨다.</p></div><div class="card"><span class="k">분류 · 회귀</span><b>XGBoost · LightGBM</b><p>나무를 <b>차례로</b> 세우며 앞의 실수를 고쳐 나간다.</p></div></div></div><figcaption>scikit-learn의 것은 <code>sklearn.linear_model</code>(직선 계열), <code>sklearn.tree</code>, <code>sklearn.ensemble</code>(여러 그루 계열)에서 꺼냅니다.</figcaption></figure>
+  <div class="plain"><b>배깅과 부스팅</b><p>여러 모델을 엮어 하나처럼 쓰는 것을 <b>앙상블</b>이라고 합니다. 엮는 방법이 둘입니다. <b>배깅</b>은 같은 시험을 여러 사람이 각자 풀고 다수결로 답을 정하는 방식입니다. 랜덤포레스트가 이것이고, 각 나무는 훈련 데이터에서 무작위로 뽑은 표본(같은 행이 여러 번 뽑혀도 됩니다)으로 따로 학습합니다. <b>부스팅</b>은 한 사람이 푼 뒤 다음 사람이 그 오답만 집중해 고치는 이어달리기입니다. XGBoost와 LightGBM이 이것입니다.</p></div>
+  <figure class="dia"><div class="dia-t">두 가지 엮는 방법</div><div class="dia-b"><div class="lane"><b>배깅<small>RandomForest</small></b><div class="cards"><div class="card"><b>나무 1</b><p>표본 1로 학습</p></div><div class="card"><b>나무 2</b><p>표본 2로 학습</p></div><div class="card"><b>나무 3</b><p>표본 3으로 학습</p></div><div class="card"><span class="k">합치기</span><b>다수결 · 평균</b><p>서로 모르는 채 동시에</p></div></div></div><div class="lane"><b>부스팅<small>XGBoost · LightGBM</small></b><div class="flow"><div class="step"><b>나무 1</b><span>전체를 푼다</span></div><div class="step"><b>나무 2</b><span>1이 틀린 것을 고친다</span></div><div class="step"><b>나무 3</b><span>아직 남은 오차를 고친다</span></div><div class="step"><b>합</b><span>차례로 쌓아 더한다</span></div></div></div></div></figure>
+<div class="code">
+  <div class="cap"><b>C-1b</b><span>로지스틱 회귀 · 분류 모델이고, 확률도 꺼낼 수 있다</span></div>
+  <pre><code>from sklearn.linear_model import LogisticRegression
+
+lr = LogisticRegression(C=1.0, max_iter=1000, random_state=7)
+lr.fit(X_train, y_train)
+
+y_pred_lr = lr.predict(X_valid)              # 0 또는 1
+proba = lr.predict_proba(X_valid)            # [0일 확률, 1일 확률]
+print(accuracy_score(y_valid, y_pred_lr))
+print(confusion_matrix(y_valid, y_pred_lr))
+print(proba[:3].round(4), lr.classes_)</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">0.99178
+[[18449     0]
+ [  155   262]]
+[[0.998  0.002 ]
+ [0.9882 0.0118]
+ [0.9867 0.0133]] [0 1]</pre>
+  <div class="why">
+    <ul>
+      <li><code>predict</code>는 결론(0 또는 1)을, <code>predict_proba</code>는 그 결론에 이르기 전의 <b>확률</b>을 돌려줍니다. 열이 둘인데 왼쪽이 0일 확률, 오른쪽이 1일 확률입니다. 1일 확률만 꺼내려면 <code>proba[:, 1]</code>입니다.</li>
+      <li>정확도는 0.992로 높지만 혼동 행렬을 보면 이상 417행 가운데 155행을 놓쳤습니다. 같은 데이터에서 랜덤포레스트는 21행만 놓쳤습니다.</li>
+      <li><code>C</code>는 제약의 세기를 뒤집어 놓은 값이라 <b>작을수록 제약이 셉니다</b>. <code>max_iter</code>는 계산을 되풀이할 최대 횟수로, 다 맞추지 못했다는 경고가 나오면 늘립니다. 정답이 한쪽으로 쏠렸을 때는 <code>class_weight='balanced'</code>를 줍니다.</li>
+    </ul>
+</div>
+</div>
+  <h4 class="sub">나무 모델의 설정을 더 보면</h4>
+  <div class="tbl"><table class=""><thead><tr><th>설정</th><th>뜻</th><th>키우면</th></tr></thead><tbody>
+    <tr><td><code>max_depth</code></td><td>질문을 몇 층까지 할지. 기본은 제한 없음</td><td>더 세세하게 가른다. 외울 위험이 커진다</td></tr>
+    <tr><td><code>min_samples_split</code></td><td>몇 행 이상 남아야 더 가를지. 기본 2</td><td>덜 가른다. 모델이 단순해진다</td></tr>
+    <tr><td><code>min_samples_leaf</code></td><td>마지막 칸에 최소 몇 행이 남아야 하는지. 기본 1</td><td>덜 가른다. 모델이 단순해진다</td></tr>
+    <tr><td><code>max_features</code></td><td>한 번 가를 때 후보로 볼 열의 수. <code>'sqrt'</code>는 열 수의 제곱근만큼</td><td>나무들이 서로 덜 달라진다</td></tr>
+    <tr><td><code>criterion</code></td><td>얼마나 잘 갈랐는지 재는 기준. 분류는 <code>'gini'</code>(기본)나 <code>'entropy'</code></td><td></td></tr>
+    <tr><td><code>n_estimators</code></td><td>나무의 수. 기본 100</td><td>안정되지만 오래 걸린다</td></tr>
+    <tr><td><code>n_jobs</code></td><td>동시에 쓸 계산 장치의 수. -1은 전부</td><td>빨라진다</td></tr>
+  </tbody></table></div>
+  <h4 class="sub">XGBoost와 LightGBM의 설정</h4>
+  <div class="tbl"><table class=""><thead><tr><th>하는 일</th><th>XGBoost</th><th>LightGBM</th></tr></thead><tbody>
+    <tr><td>나무의 수</td><td><code>n_estimators</code></td><td><code>n_estimators</code></td></tr>
+    <tr><td>한 걸음의 크기. 작으면 안정되지만 느리다</td><td><code>learning_rate</code></td><td><code>learning_rate</code></td></tr>
+    <tr><td>나무의 복잡한 정도</td><td><code>max_depth</code> (깊이)</td><td><code>num_leaves</code> (마지막 칸의 수)</td></tr>
+    <tr><td>나무마다 쓸 행의 비율</td><td><code>subsample</code></td><td><code>bagging_fraction</code></td></tr>
+    <tr><td>나무마다 쓸 열의 비율</td><td><code>colsample_bytree</code></td><td><code>feature_fraction</code></td></tr>
+    <tr><td>결과 고정</td><td><code>random_state</code></td><td><code>random_state</code></td></tr>
+  </tbody></table></div>
+  <p>둘의 차이는 나무를 키우는 순서입니다. XGBoost는 한 층을 다 채우고 다음 층으로 내려가고, LightGBM은 가장 효과가 큰 가지 하나를 골라 계속 뻗습니다. 그래서 LightGBM이 대체로 빠릅니다. 쓰는 법은 앞의 C-0과 같습니다.</p>
+  <figure class="dia"><div class="dia-t">파라미터와 하이퍼파라미터</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">모델이 정한다</span><b>파라미터</b><p>모델이 <b>학습하면서 스스로 찾는</b> 값. 나무의 질문과 기준값, 직선의 기울기, 신경망의 가중치.</p></div><div class="card"><span class="k">사람이 정한다</span><b>하이퍼파라미터</b><p>학습 <b>전에 사람이 정해 주는</b> 값. 나무의 깊이와 수, 학습률, 에폭 수.</p></div></div></div><figcaption>이름이 비슷하지만 주인이 다릅니다. 튜닝한다고 할 때 손대는 것은 하이퍼파라미터입니다.</figcaption></figure>
+<div class="code">
+  <div class="cap"><b>C-1c</b><span>RandomizedSearchCV · 조합을 다 해 보지 않고 몇 개만 뽑아 본다</span></div>
+  <pre><code>from sklearn.model_selection import RandomizedSearchCV
+
+param_dist = {'n_estimators': [100, 200], 'max_depth': [5, 10, 20, None],
+              'min_samples_split': [2, 5, 10], 'min_samples_leaf': [1, 2, 4]}
+rs = RandomizedSearchCV(RandomForestClassifier(random_state=7),
+                        param_distributions=param_dist,   # GridSearchCV 는 param_grid
+                        n_iter=5,                         # 5가지 조합만 뽑는다
+                        cv=3, scoring='accuracy', random_state=7, n_jobs=-1)
+rs.fit(X_train, y_train)
+print(rs.best_params_, rs.best_score_.round(4), rs.score(X_valid, y_valid).round(4))</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">{'n_estimators': 100, 'min_samples_split': 5, 'min_samples_leaf': 2, 'max_depth': None} 0.9981 0.9987</pre>
+  <div class="why"><p>후보를 전부 조합하면 2 × 4 × 3 × 3 = 72가지입니다. GridSearchCV는 72가지를 모두 해 보고, RandomizedSearchCV는 그중 <code>n_iter</code>개만 무작위로 골라 해 봅니다. 5가지만 해 보고도 검증 정확도 0.9987로 앞의 전체 탐색(0.9988)과 거의 같은 결과를 얻었습니다. 인자 이름이 <code>param_grid</code>가 아니라 <code>param_distributions</code>라는 점, <code>n_iter</code>가 더 붙는다는 점이 정정 문항의 재료입니다. 결과를 꺼내는 <code>best_params_</code>, <code>best_estimator_</code>는 같습니다.</p></div>
+</div>
+  <figure class="dia"><div class="dia-t">과적합을 줄이는 방법</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">재료</span><b>데이터를 늘린다</b><p>예시가 많을수록 외우기 어렵다. 가장 근본적인 방법.</p></div><div class="card"><span class="k">설정</span><b>모델을 단순하게</b><p>나무는 max_depth를 줄이고 min_samples를 키운다. 신경망은 층과 뉴런을 줄인다.</p></div><div class="card"><span class="k">규제</span><b>제약을 건다</b><p>Ridge, Lasso의 alpha. 로지스틱 회귀의 C. 신경망의 Dropout.</p></div><div class="card"><span class="k">신경망</span><b>일찍 멈춘다</b><p>검증 점수가 나빠지기 전에 학습을 끝낸다. EarlyStopping.</p></div><div class="card"><span class="k">점검</span><b>나눠서 확인한다</b><p>교차검증으로 한 번의 우연에 속지 않는다.</p></div></div></div><figcaption>과적합은 "공부한 문제만 잘 푸는" 상태이고, 훈련 점수와 검증 점수의 차이가 크면 의심합니다.</figcaption></figure>
+
+  <h3><span class="q">문항 11 · 모델 성능 개선 및 그래픽 출력</span>변수중요도를 막대로 그린다</h3>
   <div class="plain"><b>요리의 재료에 빗대면</b><p>맛을 좌우한 재료가 무엇인지 알면 다음 요리가 쉬워집니다. 나무 모델은 학습하면서 어떤 열로 질문했을 때 답이 가장 잘 갈렸는지를 기록해 둡니다. 그 기록이 <b>변수중요도</b>입니다. 중요도가 0에 가까운 열은 빼도 성능이 거의 그대로입니다.</p></div>
   <figure class="dia"><div class="dia-t">연습 데이터에서 실제로 나온 변수중요도</div><div class="dia-b"><div class="bars"><div class="bar-row"><span>brg_temp_c</span><span class="tr"><i class="" style="width:100.0%"></i></span><span>0.456</span></div><div class="bar-row"><span>suc_press_bar</span><span class="tr"><i class="" style="width:52.3%"></i></span><span>0.238</span></div><div class="bar-row"><span>vib_rms_mms</span><span class="tr"><i class="" style="width:28.3%"></i></span><span>0.129</span></div><div class="bar-row"><span>motor_current_a</span><span class="tr"><i class="" style="width:10.7%"></i></span><span>0.049</span></div><div class="bar-row"><span>rpm</span><span class="tr"><i class="" style="width:9.3%"></i></span><span>0.042</span></div><div class="bar-row"><span>flow_m3h</span><span class="tr"><i class="" style="width:9.2%"></i></span><span>0.042</span></div><div class="bar-row"><span>dis_press_bar</span><span class="tr"><i class="" style="width:9.0%"></i></span><span>0.041</span></div><div class="bar-row"><span>op_state_run</span><span class="tr"><i class="" style="width:1.5%"></i></span><span>0.002</span></div><div class="bar-row"><span>op_state_low</span><span class="tr"><i class="" style="width:1.5%"></i></span><span>0.000</span></div></div></div><figcaption>아래 C-2 코드가 그리는 막대 그래프와 같은 값입니다. 전부 더하면 1입니다.</figcaption></figure>
 
@@ -1352,7 +1731,75 @@ confusion_matrix - RandomForest      confusion_matrix - DecisionTree
     <p class="res">MAE는 "평균적으로 16.7만큼 빗나간다"로 바로 읽힙니다. MSE는 제곱하기 때문에 30짜리 큰 오차 하나가 전체의 대부분(900 ÷ 1,100)을 차지합니다. 크게 틀리는 것을 특히 싫어하는 지표입니다. 셋 다 작을수록 좋습니다.</p>
   </div>
 
-<h3><span class="q">문항 13에 앞서</span>딥러닝은 어떻게 배우는가</h3>
+  <h3><span class="q">문항 10~12 · 회귀라면</span>같은 흐름을 숫자 맞히기 문제로 풀어 본다</h3>
+  <p>지금까지는 정답이 0과 1인 분류였습니다. 정답이 이어진 숫자인 회귀에서는 무엇이 바뀌는지, 같은 연습 데이터로 <b>모터 전류(motor_current_a)</b>를 맞히는 문제를 풀어 확인합니다. 바뀌는 곳은 모델 이름의 끝(Regressor), 평가 지표, 그리고 stratify를 쓰지 않는다는 것뿐입니다.</p>
+<div class="code">
+  <div class="cap"><b>C-3b</b><span>회귀 한 벌 · 나누기, 스케일링, 다섯 모델, 세 지표</span></div>
+  <pre><code>from sklearn.preprocessing import RobustScaler
+from sklearn.linear_model import LinearRegression, Ridge, Lasso
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
+
+X = df_preset.drop(columns=['motor_current_a', 'label'])
+y = df_preset['motor_current_a']
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.2, random_state=42)
+
+rs = RobustScaler()
+X_train = rs.fit_transform(X_train)
+X_valid = rs.transform(X_valid)
+
+models = {'LinearRegression': LinearRegression(),
+          'Ridge': Ridge(alpha=1.0),
+          'Lasso': Lasso(alpha=0.1),
+          'DecisionTree': DecisionTreeRegressor(max_depth=5, min_samples_split=3, random_state=120),
+          'RandomForest': RandomForestRegressor(max_depth=5, min_samples_split=3, random_state=120)}
+for name, model in models.items():
+    model.fit(X_train, y_train)
+    pred = model.predict(X_valid)
+    mse = mean_squared_error(y_valid, pred)
+    print(name, mean_absolute_error(y_valid, pred), mse, mse ** 0.5, r2_score(y_valid, pred))</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">                    MAE      MSE     RMSE       R2
+LinearRegression  0.2834   0.1249   0.3534   0.9916
+Ridge             0.2834   0.1249   0.3535   0.9916
+Lasso             0.3046   0.1476   0.3841   0.9901
+DecisionTree      0.3689   0.2139   0.4625   0.9856
+RandomForest      0.3258   0.1687   0.4107   0.9887</pre>
+  <div class="why">
+    <ul>
+      <li>MAE가 가장 작은 모델이 가장 우수합니다. 여기서는 LinearRegression입니다. 전류가 회전수와 거의 직선 관계라 직선 모델이 나무 모델보다 잘 맞았습니다. 늘 복잡한 모델이 이기는 것은 아닙니다.</li>
+      <li>전류의 평균은 약 19.9입니다. "언제나 평균이라고 답하는" 가장 단순한 예측의 MAE는 2.99입니다. 0.28은 그보다 열 배 넘게 가깝습니다. R² 0.99가 이 뜻입니다.</li>
+      <li><b>RMSE는 <code>mse ** 0.5</code> 또는 <code>np.sqrt(mse)</code>로 직접 구합니다.</b> 예전에 쓰던 <code>mean_squared_error(..., squared=False)</code>는 최근 scikit-learn에서 없어졌습니다.</li>
+      <li>Lasso의 가중치를 찍어 보면 여덟 개 가운데 다섯 개가 0입니다. 쓸모가 적다고 본 열을 스스로 뺀 것입니다. Ridge는 0으로 만들지 않고 고르게 줄입니다.</li>
+      <li><code>for name, model in models.items():</code>는 딕셔너리에서 이름과 모델을 한 쌍씩 꺼내 되풀이합니다. 여러 모델을 나란히 비교하라는 문항에서 쓰기 좋은 모양입니다.</li>
+    </ul>
+</div>
+</div>
+  <figure class="dia"><div class="dia-t">검증 MAE 비교 · 막대가 짧을수록 좋다</div><div class="dia-b"><div class="bars"><div class="bar-row"><span>LinearRegression</span><span class="tr"><i class="" style="width:76.8%"></i></span><span>0.2834</span></div><div class="bar-row"><span>Ridge</span><span class="tr"><i class="" style="width:76.8%"></i></span><span>0.2834</span></div><div class="bar-row"><span>Lasso</span><span class="tr"><i class="" style="width:82.6%"></i></span><span>0.3046</span></div><div class="bar-row"><span>RandomForest</span><span class="tr"><i class="" style="width:88.3%"></i></span><span>0.3258</span></div><div class="bar-row"><span>DecisionTree</span><span class="tr"><i class="" style="width:100.0%"></i></span><span>0.3689</span></div></div></div><figcaption>위 실행 결과의 MAE를 그대로 그렸습니다. 단위는 전류와 같은 암페어(A)입니다.</figcaption></figure>
+
+  <h3><span class="q">문항 12 · 더 보기</span>ROC 곡선과 AUC · 기준선을 옮겨 가며 본 성적</h3>
+  <div class="plain"><b>문턱 높이에 빗대면</b><p>분류 모델은 속으로 "이상일 확률"을 계산한 뒤 0.5를 넘으면 이상이라고 답합니다. 이 문턱을 낮추면 더 많이 잡아내지만 헛짚는 것도 늘고, 높이면 그 반대입니다. <b>ROC 곡선</b>은 문턱을 0부터 1까지 옮겨 가며 "잡아낸 비율"과 "헛짚은 비율"이 어떻게 함께 움직이는지를 한 줄로 그린 것입니다.</p></div>
+  <figure class="dia"><div class="dia-t">연습 데이터의 실제 ROC 곡선</div><div class="dia-b"><svg viewBox="0 0 680 300" role="img" aria-label="로지스틱 회귀와 랜덤포레스트의 ROC 곡선"><line x1="60" y1="260.0" x2="660" y2="260.0" stroke="var(--line)"/><text x="52" y="264.0" font-size="11" fill="var(--muted)" text-anchor="end">0</text><text x="60.0" y="280" font-size="11" fill="var(--muted)" text-anchor="middle">0</text><line x1="60" y1="199.0" x2="660" y2="199.0" stroke="var(--line)"/><text x="52" y="203.0" font-size="11" fill="var(--muted)" text-anchor="end">0.25</text><text x="210.0" y="280" font-size="11" fill="var(--muted)" text-anchor="middle">0.25</text><line x1="60" y1="138.0" x2="660" y2="138.0" stroke="var(--line)"/><text x="52" y="142.0" font-size="11" fill="var(--muted)" text-anchor="end">0.5</text><text x="360.0" y="280" font-size="11" fill="var(--muted)" text-anchor="middle">0.5</text><line x1="60" y1="77.0" x2="660" y2="77.0" stroke="var(--line)"/><text x="52" y="81.0" font-size="11" fill="var(--muted)" text-anchor="end">0.75</text><text x="510.0" y="280" font-size="11" fill="var(--muted)" text-anchor="middle">0.75</text><line x1="60" y1="16.0" x2="660" y2="16.0" stroke="var(--line)"/><text x="52" y="20.0" font-size="11" fill="var(--muted)" text-anchor="end">1</text><text x="660.0" y="280" font-size="11" fill="var(--muted)" text-anchor="middle">1</text><line x1="60" y1="260" x2="660" y2="16" stroke="var(--muted)" stroke-dasharray="5 4"/><text x="432.0" y="133.12" font-size="11.5" fill="var(--muted)">찍기 (AUC 0.5)</text><polyline fill="none" stroke="var(--warn)" stroke-width="2.5" points="60.0,260.0 60.0,242.5 60.0,88.0 60.1,88.0 60.1,87.4 60.1,86.2 60.1,86.2 60.2,84.5 60.2,81.5 60.3,81.5 60.5,81.0 60.5,80.4 60.5,80.4 60.6,79.2 60.6,78.6 61.1,78.6 62.2,78.0 62.6,77.4 63.2,76.9 63.8,75.7 64.1,75.1 64.4,74.5 64.7,73.3 65.0,72.8 65.2,72.2 65.3,71.6 65.3,71.0 65.8,71.0 67.8,70.4 67.8,69.8 68.2,69.8 68.7,69.2 68.7,68.7 69.1,68.7 71.7,68.1 71.7,67.5 74.1,67.5 74.1,66.9 74.1,66.3 84.8,66.3 88.8,65.7 88.8,65.1 92.8,64.6 99.0,63.4 111.5,62.2 115.7,61.1 120.2,59.9 120.5,58.7 127.1,57.6 133.1,56.4 139.1,55.2 143.3,54.0 151.9,53.5 157.6,52.3 178.3,51.1 184.4,49.9 190.8,48.8 192.5,47.6 194.3,46.4 198.4,45.3 199.7,44.1 204.5,42.9 234.6,41.7 239.7,41.2 246.7,40.0 252.7,38.8 258.1,37.6 276.2,36.5 278.0,35.3 282.4,34.1 311.5,33.0 354.7,31.8 445.6,30.6 468.2,29.5 482.5,28.9 484.8,27.7 506.6,26.5 521.4,25.4 529.1,24.2 547.1,23.0 560.0,21.9 570.7,20.1 605.5,18.9 632.7,17.8 660.0,16.0"/><polyline fill="none" stroke="var(--accent)" stroke-width="2.5" points="60.0,260.0 60.0,164.6 60.0,162.9 60.0,128.9 60.0,126.6 60.0,95.6 60.0,93.8 60.0,89.2 60.0,77.4 60.0,75.7 60.0,73.3 60.0,67.5 60.0,65.1 60.0,62.2 60.0,60.5 60.0,58.7 60.0,55.8 60.0,51.1 60.0,48.8 60.0,47.6 60.0,44.1 60.0,42.9 60.1,42.9 60.1,40.0 60.1,38.8 60.1,38.2 60.1,33.0 60.1,28.3 60.1,26.0 60.1,25.4 60.1,23.0 60.2,20.7 60.3,20.7 60.4,20.7 60.5,20.1 60.5,20.1 60.5,18.9 60.7,18.9 60.8,18.9 61.1,18.9 61.6,18.9 62.2,18.9 62.3,18.9 63.2,18.9 63.4,18.3 63.4,18.3 64.8,18.3 64.8,17.8 64.9,17.8 65.2,17.8 65.2,17.8 67.9,17.8 68.3,17.8 68.7,17.8 73.8,17.2 74.0,17.2 74.4,17.2 74.8,17.2 74.9,17.2 74.9,17.2 76.1,17.2 76.3,17.2 97.3,16.6 97.5,16.6 98.2,16.6 98.4,16.6 98.9,16.6 99.2,16.6 100.0,16.6 100.6,16.6 101.5,16.6 102.4,16.6 104.5,16.6 660.0,16.0"/><text x="170.0" y="33.079999999999984" font-size="12" fill="var(--accent)">RandomForest · AUC 0.998</text><text x="240.0" y="64.79999999999998" font-size="12" fill="var(--warn)">LogisticRegression · AUC 0.918</text><text x="360.0" y="296" font-size="11.5" fill="var(--muted)" text-anchor="middle">헛짚은 비율 (정상을 이상이라 한 비율) →</text><text x="14" y="26" font-size="11.5" fill="var(--muted)">잡아낸 비율 ↑</text></svg></div><figcaption>곡선이 왼쪽 위 모서리에 붙을수록 좋습니다. 헛짚지 않으면서 다 잡아낸다는 뜻이기 때문입니다. 곡선 아래의 넓이가 <b>AUC</b>이고 1에 가까울수록 좋습니다. 대각선은 동전 던지기로 찍었을 때의 선(0.5)입니다. 정확도는 로지스틱 회귀 0.992, 랜덤포레스트 0.999로 비슷해 보였지만 AUC로는 0.918과 0.998로 차이가 드러납니다.</figcaption></figure>
+<div class="code">
+  <div class="cap"><b>C-3c</b><span>AUC 구하기와 ROC 곡선 그리기</span></div>
+  <pre><code>from sklearn.metrics import roc_auc_score, roc_curve
+
+proba_lr = lr.predict_proba(X_valid)[:, 1]           # 1일 확률만
+proba_rf = rf.predict_proba(X_valid)[:, 1]
+print(roc_auc_score(y_valid, proba_lr), roc_auc_score(y_valid, proba_rf))
+
+fpr, tpr, thresholds = roc_curve(y_valid, proba_rf)  # 헛짚은 비율, 잡아낸 비율, 문턱들
+plt.plot(fpr, tpr)
+plt.plot([0, 1], [0, 1], linestyle='--')             # 찍기 선
+plt.xlabel('False Positive Rate'); plt.ylabel('True Positive Rate')
+plt.show()</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">0.9178  0.9985</pre>
+  <div class="why"><p><b>AUC에는 predict가 아니라 predict_proba의 확률을 넣습니다.</b> 0과 1로 이미 잘라 버린 답을 넣으면 문턱을 옮겨 볼 수 없습니다. <code>[:, 1]</code>은 "모든 행의 1번 열", 곧 1일 확률입니다. 정답이 한쪽으로 쏠린 데이터에서는 정확도보다 F1과 AUC를 먼저 보라는 지시가 나올 수 있습니다.</p></div>
+</div>
+
+  <h3><span class="q">문항 13에 앞서</span>딥러닝은 어떻게 배우는가</h3>
   <div class="plain"><b>여러 겹의 체에 빗대면</b><p>딥러닝 모델은 입력을 여러 겹의 층에 차례로 통과시킵니다. 층 하나하나는 단순한 계산이지만, 겹겹이 쌓이면 복잡한 규칙도 담을 수 있습니다. "딥(deep)"은 이 층이 깊다는 뜻입니다.</p></div>
 
   <p>신경망의 가장 작은 단위는 <b>뉴런</b>입니다. 뉴런 하나는 들어온 값마다 가중치를 곱해 더하고, 편향을 더한 뒤, 활성 함수를 한 번 통과시킵니다. 이 뉴런을 나란히 놓은 것이 층이고, 층을 겹겹이 쌓은 것이 신경망입니다. <code>Dense(64)</code>는 뉴런 64개짜리 층 하나입니다.</p>
@@ -1433,7 +1880,12 @@ confusion_matrix - RandomForest      confusion_matrix - DecisionTree
   <div class="plain"><b>문제집에 빗대면</b><p>훈련 데이터 44,020행이 문제집 한 권입니다. 한 번에 다 풀고 채점하는 대신 128문제씩 끊어서 풀고 그때마다 채점과 복습을 합니다. 이 한 묶음이 <b>배치</b>, 한 묶음을 처리하는 것이 <b>스텝</b>입니다. 문제집 한 권을 끝까지 푸는 것이 <b>에폭</b>이고, 같은 문제집을 30번 되풀이하면 에폭 30입니다.</p></div>
   <figure class="dia"><div class="dia-t">에폭, 배치, 스텝 · 연습 데이터의 실제 숫자</div><div class="dia-b"><div class="blocks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i class="e"></i></div><div class="cards"><div class="card"><span class="k">한 묶음</span><b>배치 128</b><p>한 번에 묶어 넣는 행의 수. <code>batch_size=128</code></p></div><div class="card"><span class="k">1에폭</span><b>344스텝</b><p>44,020 ÷ 128 = 343.9. 올림하여 344묶음. 마지막 묶음은 116행.</p></div><div class="card"><span class="k">전체</span><b>에폭 30</b><p>344스텝을 30번. 가중치를 모두 10,320번 고친다.</p></div></div></div><figcaption>네모 하나가 배치 8개를 뜻합니다(43칸 = 344묶음). 학습 로그의 <code>344/344</code>가 이 숫자입니다.</figcaption></figure>
 
-<h3><span class="q">문항 13 · 딥러닝 모델 학습</span>층을 쌓고, 컴파일하고, fit한다</h3>
+  <figure class="dia"><div class="dia-t">활성 함수 더 보기</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">-1 ~ 1</span><b>tanh</b><p>어떤 값이든 -1과 1 사이로 누른다. sigmoid의 사촌.</p></div><div class="card"><span class="k">relu의 변형</span><b>LeakyReLU · selu · elu</b><p>relu는 음수를 전부 0으로 만든다. 이 셋은 음수도 조금 흘려보내 뉴런이 아예 꺼져 버리는 일을 줄인다.</p></div><div class="card"><span class="k">왜 relu인가</span><b>기울기 소실</b><p>sigmoid와 tanh는 큰 값이 들어오면 출력이 거의 변하지 않는다. 층을 깊이 쌓으면 "어느 쪽으로 고칠지"의 신호가 앞쪽 층까지 전해지지 않는다. 그래서 은닉층에는 relu 계열을 쓴다.</p></div></div></div><figcaption>정리하면 <b>은닉층은 relu 계열, 출력층은 문제의 종류에 따라</b> sigmoid(둘 중 하나), softmax(여럿 중 하나), linear(숫자)입니다.</figcaption></figure>
+  <figure class="dia"><div class="dia-t">손실 함수 네 가지</div><div class="dia-b"><div class="cards"><div class="card"><span class="k">회귀</span><b>MSE · mean_squared_error</b><p>오차를 제곱해 평균. 크게 틀린 것에 벌점이 크다. 회귀의 기본.</p></div><div class="card"><span class="k">회귀</span><b>MAE · mean_absolute_error</b><p>오차의 크기를 그대로 평균. 튀는 값에 덜 휘둘린다.</p></div><div class="card"><span class="k">이진 분류</span><b>binary_crossentropy</b><p>정답 쪽에 준 확률이 낮을수록 벌점이 급격히 커진다. 둘 중 하나.</p></div><div class="card"><span class="k">다중 분류</span><b>categorical_crossentropy</b><p>같은 원리를 보기 여럿으로 넓힌 것.</p></div></div></div><figcaption>crossentropy는 "자신 있게 틀릴수록 크게 혼나는" 점수입니다. 정답이 1인데 0.9라고 하면 벌점이 작고, 0.1이라고 하면 벌점이 큽니다.</figcaption></figure>
+  <div class="plain"><b>안개 낀 산에서 내려오기에 빗대면</b><p>손실을 줄이는 방법은 안개 낀 산에서 내려오는 것과 같습니다. 발밑의 기울기를 보고 내리막 쪽으로 한 걸음 내딛고, 다시 기울기를 보고 또 내딛습니다. 이것이 <b>경사 하강법</b>입니다. 한 걸음의 크기가 학습률입니다. 전체 데이터를 다 보고 한 걸음 가면 정확하지만 느리고, 한 건만 보고 가면 빠르지만 비틀거립니다. 그 사이로, 한 묶음(배치)을 보고 한 걸음 가는 방식을 씁니다. <code>adam</code>은 걸음의 크기를 상황에 맞춰 스스로 조절하는 방법으로, 지시가 없으면 이것을 씁니다.</p></div>
+  <div class="note"><div class="ic">!</div><p><b>BatchNormalization을 넣으라는 지시가 있다면.</b> 층의 출력을 묶음마다 고르게 맞춰 학습을 안정시키는 층입니다. Dense 다음에 놓습니다. Dropout과 함께 쓰면 Dense → BatchNormalization → Dropout 순서가 흔합니다. 토폴로지 그림에 그려진 순서가 있으면 그 순서를 따릅니다.</p></div>
+
+  <h3><span class="q">문항 13 · 딥러닝 모델 학습</span>층을 쌓고, 컴파일하고, fit한다</h3>
   <p>딥러닝 문항에는 층 구성을 그린 토폴로지 그림이 주어지고, 그 그림을 코드로 옮깁니다. 순서는 늘 같습니다. <b>층을 쌓고 → compile → fit</b>.</p>
 
   <figure class="fig">
@@ -1685,7 +2137,104 @@ print(model2.count_params(), model.count_params())</code></pre>
 
     <figure class="dia"><div class="dia-t">EarlyStopping이 멈춘 자리 · 아래 C-4b 실행의 실제 val_loss</div><div class="dia-b"><svg viewBox="0 0 680 210" role="img" aria-label="val_loss 곡선"><line x1="52" y1="176.0" x2="664" y2="176.0" stroke="var(--line)"/><text x="44" y="180.0" font-size="11" fill="var(--muted)" text-anchor="end">0.020</text><line x1="52" y1="136.0" x2="664" y2="136.0" stroke="var(--line)"/><text x="44" y="140.0" font-size="11" fill="var(--muted)" text-anchor="end">0.031</text><line x1="52" y1="96.0" x2="664" y2="96.0" stroke="var(--line)"/><text x="44" y="100.0" font-size="11" fill="var(--muted)" text-anchor="end">0.042</text><line x1="52" y1="56.0" x2="664" y2="56.0" stroke="var(--line)"/><text x="44" y="60.0" font-size="11" fill="var(--muted)" text-anchor="end">0.054</text><line x1="52" y1="16.0" x2="664" y2="16.0" stroke="var(--line)"/><text x="44" y="20.0" font-size="11" fill="var(--muted)" text-anchor="end">0.065</text><text x="52.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">1</text><text x="179.5" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">6</text><text x="307.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">11</text><text x="434.5" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">16</text><text x="562.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">21</text><text x="664" y="198" font-size="11" fill="var(--muted)" text-anchor="end">epoch</text><polyline fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linejoin="round" points="52.0,25.6 77.5,117.0 103.0,123.7 128.5,129.1 154.0,136.2 179.5,139.0 205.0,141.9 230.5,144.0 256.0,145.4 281.5,147.6 307.0,149.3 332.5,150.8 358.0,154.0 383.5,153.6 409.0,153.2 434.5,150.4 460.0,156.1 485.5,157.2 511.0,160.0 536.5,165.3 562.0,159.6 587.5,160.7 613.0,163.6 638.5,159.6 664.0,161.1"/><line x1="536.5" y1="16" x2="536.5" y2="176" stroke="var(--accent)" stroke-dasharray="4 4"/><circle cx="536.5" cy="165.3" r="4.5" fill="var(--accent)"/><text x="530.5" y="28" font-size="11.5" fill="var(--accent)" text-anchor="end">20에폭 · 최저 0.0230</text><line x1="664.0" y1="16" x2="664.0" y2="176" stroke="var(--muted)" stroke-dasharray="4 4"/><circle cx="664.0" cy="161.1" r="4.5" fill="var(--muted)"/><text x="658.0" y="46" font-size="11.5" fill="var(--muted)" text-anchor="end">25에폭 · 멈춤</text></svg><div class="fig-leg" style="font-size:13px;color:var(--muted)">주황 선이 에폭마다의 val_loss입니다. 낮을수록 좋습니다.</div></div><figcaption>20에폭에서 가장 낮았고, 그 뒤 다섯 에폭(patience=5) 동안 이 값을 넘어서지 못해 25에폭에서 멈췄습니다. <code>restore_best_weights=True</code>이므로 모델은 20에폭의 상태로 되돌아갑니다.</figcaption></figure>
 
-<h3><span class="q">문항 14 · 그래픽 출력</span>학습 곡선으로 일반화를 읽는다</h3>
+  <h3><span class="q">문항 13~14 · 회귀 모델</span>출력층과 손실만 바꾸면 숫자를 맞히는 신경망이 된다</h3>
+  <p>회귀 샘플 문항의 지시(은닉층 selu, 출력층 linear, 손실 mean_squared_error)를 그대로 따라, 앞의 모터 전류 문제를 신경망으로 풉니다.</p>
+<div class="code">
+  <div class="cap"><b>C-4d</b><span>회귀 딥러닝 모델과 MSE 학습 곡선</span></div>
+  <pre><code>model = Sequential()
+model.add(Dense(64, activation='selu', input_dim=X_train.shape[1]))
+model.add(Dropout(0.1))
+model.add(Dense(32, activation='selu'))
+model.add(Dense(16, activation='selu'))
+model.add(Dense(1, activation='linear'))          # 숫자 하나를 그대로 내보낸다
+
+estop = EarlyStopping(monitor='val_loss', patience=9)
+model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
+
+history = model.fit(X_train, y_train, batch_size=128, epochs=30,
+                    validation_data=(X_valid, y_valid), callbacks=[estop])
+
+plt.plot(history.history['mse'])
+plt.plot(history.history['val_mse'])
+plt.title('Model MSE'); plt.xlabel('Epoch'); plt.ylabel('MSE')
+plt.legend(['mse', 'val_mse'])
+plt.show()
+
+pred = model.predict(X_valid).flatten()</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">dict_keys(['loss', 'mse', 'val_loss', 'val_mse'])
+
+epoch      1        2        3    ...     28       29       30
+mse     49.9179   0.9956   0.6711  ...   0.2481   0.2477   0.2467
+val_mse  0.2653   0.1792   0.1587  ...   0.1219   0.1226   0.1196
+
+예측 [14.09 13.44 18.97]   정답 [13.85 13.55 19.06]
+검증 MAE 0.2765 · R2 0.992</pre>
+  <div class="why">
+    <ul>
+      <li>분류 모델과 달라진 곳은 세 군데입니다. 마지막 층이 <code>Dense(1, activation='linear')</code>, 손실이 <code>mean_squared_error</code>, 지켜보는 숫자가 <code>['mse']</code>. 정답 y는 인코딩하지 않고 숫자 그대로 넣습니다.</li>
+      <li><code>metrics=['mse']</code>로 정했으므로 기록의 이름이 <code>mse</code>와 <code>val_mse</code>입니다. 그래프를 그릴 때 이 이름을 그대로 씁니다. loss도 mse라서 <code>loss</code>와 <code>mse</code>의 값이 같습니다.</li>
+      <li>첫 에폭의 mse가 49.9로 큰 것은 처음에는 가중치가 아무 값이나 들어 있어 전류 19 근처를 전혀 못 맞히기 때문입니다. 두 번째 에폭에 1.0 아래로 떨어집니다.</li>
+      <li>훈련 데이터 50,308행 ÷ 128 = 393.03이라 에폭당 394스텝입니다. 파라미터는 3,201개입니다.</li>
+      <li>검증 MAE 0.2765는 앞의 LinearRegression(0.2834)과 비슷한 수준입니다.</li>
+    </ul>
+</div>
+</div>
+  <figure class="dia"><div class="dia-t">위 실행의 실제 MSE 곡선</div><div class="dia-b"><svg viewBox="0 0 680 210" role="img" aria-label="회귀 딥러닝 모델의 mse와 val_mse 곡선"><line x1="52" y1="176.0" x2="664" y2="176.0" stroke="var(--line)"/><text x="44" y="180.0" font-size="11" fill="var(--muted)" text-anchor="end">0.00</text><line x1="52" y1="136.0" x2="664" y2="136.0" stroke="var(--line)"/><text x="44" y="140.0" font-size="11" fill="var(--muted)" text-anchor="end">0.25</text><line x1="52" y1="96.0" x2="664" y2="96.0" stroke="var(--line)"/><text x="44" y="100.0" font-size="11" fill="var(--muted)" text-anchor="end">0.50</text><line x1="52" y1="56.0" x2="664" y2="56.0" stroke="var(--line)"/><text x="44" y="60.0" font-size="11" fill="var(--muted)" text-anchor="end">0.75</text><line x1="52" y1="16.0" x2="664" y2="16.0" stroke="var(--line)"/><text x="44" y="20.0" font-size="11" fill="var(--muted)" text-anchor="end">1.00</text><text x="52.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">1</text><text x="157.5" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">6</text><text x="263.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">11</text><text x="368.6" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">16</text><text x="474.1" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">21</text><text x="579.6" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">26</text><polyline fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" points="52.0,16.0 73.1,16.7 94.2,68.6 115.3,88.1 136.4,99.5 157.5,108.6 178.6,115.0 199.7,120.0 220.8,124.5 241.9,126.2 263.0,128.4 284.1,129.4 305.2,130.6 326.3,131.3 347.4,132.3 368.6,132.7 389.7,133.1 410.8,133.5 431.9,134.0 453.0,134.4 474.1,134.7 495.2,134.9 516.3,135.3 537.4,135.5 558.5,135.9 579.6,136.1 600.7,136.1 621.8,136.3 642.9,136.4 664.0,136.5"/><polyline fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linejoin="round" points="52.0,133.6 73.1,147.3 94.2,150.6 115.3,151.5 136.4,152.9 157.5,154.3 178.6,154.4 199.7,155.5 220.8,155.5 241.9,154.9 263.0,155.3 284.1,155.6 305.2,155.5 326.3,154.8 347.4,155.4 368.6,156.1 389.7,155.9 410.8,155.7 431.9,156.3 453.0,156.0 474.1,155.6 495.2,154.4 516.3,156.1 537.4,156.6 558.5,155.8 579.6,156.5 600.7,156.6 621.8,156.5 642.9,156.4 664.0,156.9"/><text x="60.0" y="28" font-size="11.5" fill="var(--accent)">첫 에폭 mse 49.9 (축 밖)</text><text x="664" y="198" font-size="11" fill="var(--muted)" text-anchor="end">epoch</text></svg></div><figcaption>초록이 mse(훈련), 주황이 val_mse(검증)입니다. 둘이 함께 내려가 평평해집니다. 검증 쪽이 더 낮은 것은 Dropout이 학습할 때만 켜져 훈련 쪽 점수가 조금 불리하게 재어지기 때문입니다.</figcaption></figure>
+
+  <h3><span class="q">문항 13 · 다중 분류 모델</span>보기가 셋 이상이면 softmax로 고른다</h3>
+  <p>정답의 보기가 둘보다 많을 때는 출력층의 뉴런을 보기 수만큼 두고 softmax를 씁니다. 연습 데이터의 <code>event_type</code> 열을 정답으로 삼아, 기록이 다섯 가지 상태(normal, cavitation, impeller_wear, sensor_stuck, spike) 가운데 어느 것인지 맞혀 봅니다.</p>
+<div class="code">
+  <div class="cap"><b>C-4e</b><span>다중 분류 · 정답을 번호로 바꾸고, 보기 수만큼 출력한다</span></div>
+  <pre><code>dm = df.drop(columns=['timestamp', 'label', 'degraded']).dropna(subset=['flow_m3h'])
+dm['event_type'] = dm['event_type'].fillna('normal')      # 비어 있는 칸은 정상
+dm = pd.get_dummies(dm, columns=['op_state'], dtype=int)
+
+X = dm.drop('event_type', axis=1)
+le = LabelEncoder()
+y = le.fit_transform(dm['event_type'])                    # 글자 다섯 가지를 0~4로
+print(le.classes_)
+
+X_train, X_valid, y_train, y_valid = train_test_split(X, y, test_size=0.3, random_state=7, stratify=y)
+ss = StandardScaler(); X_train = ss.fit_transform(X_train); X_valid = ss.transform(X_valid)
+
+model = Sequential([Input(shape=(X_train.shape[1],)),
+                    Dense(64, activation='relu'),
+                    Dense(32, activation='relu'),
+                    Dense(len(le.classes_), activation='softmax')])     # 보기 5개
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+model.fit(X_train, y_train, epochs=20, batch_size=128, validation_data=(X_valid, y_valid))
+
+pred = model.predict(X_valid)
+print(pred.shape, pred[0].round(3), pred[0].sum())
+y_pred = np.argmax(pred, axis=1)
+print(y_pred[:5], le.inverse_transform(y_pred[:5]))
+print(classification_report(y_valid, y_pred, target_names=le.classes_))</code></pre>
+  <div class="out-cap">실행 결과</div>
+  <pre class="out">['cavitation' 'impeller_wear' 'normal' 'sensor_stuck' 'spike']
+
+(18960, 5) [0. 0. 1. 0. 0.] 1.0
+[2 1 2 3 2] ['normal' 'impeller_wear' 'normal' 'sensor_stuck' 'normal']
+
+               precision    recall  f1-score   support
+   cavitation      0.992     0.891     0.939       147
+impeller_wear      0.983     0.988     0.985      2403
+       normal      0.993     0.997     0.995     16139
+ sensor_stuck      0.995     0.764     0.864       267
+        spike      1.000     0.250     0.400         4
+     accuracy                          0.992     18960
+    macro avg      0.993     0.778     0.837     18960</pre>
+  <div class="why">
+    <ul>
+      <li>예측 한 건은 숫자 다섯 개이고 <b>전부 더하면 1</b>입니다. 보기마다의 확률입니다. <code>np.argmax</code>로 가장 큰 자리의 번호를 뽑고, <code>le.inverse_transform</code>으로 번호를 원래 이름으로 되돌립니다.</li>
+      <li>정답을 0~4 번호 그대로 썼으므로 손실은 <code>sparse_categorical_crossentropy</code>입니다. <code>to_categorical(y_train)</code>로 원-핫으로 펼쳤다면(모양이 (44239, 5)가 됩니다) <code>categorical_crossentropy</code>를 씁니다. 둘은 정답의 모양만 다르고 하는 일은 같습니다.</li>
+      <li><b>classification_report를 줄마다 읽습니다.</b> 전체 정확도는 0.992지만 spike는 검증에 4건뿐이고 그중 1건만 맞혔습니다(recall 0.250). 건수가 적은 보기는 전체 정확도에 거의 영향을 주지 못합니다. support가 그 보기의 실제 건수이고, macro avg는 보기마다의 점수를 건수와 상관없이 똑같은 무게로 평균 낸 값입니다.</li>
+      <li>이진 분류에서 지웠던 event_type을 이번에는 정답으로 썼고, 대신 label과 degraded를 지웠습니다. 정답을 알려 주는 열은 입력에서 빼야 한다는 원칙은 같습니다.</li>
+    </ul>
+</div>
+</div>
+
+  <h3><span class="q">문항 14 · 그래픽 출력</span>학습 곡선으로 일반화를 읽는다</h3>
   <div class="plain"><b>성적 추이에 빗대면</b><p>문제집 점수(훈련)와 모의고사 점수(검증)를 회차마다 나란히 적어 보면 공부가 어떻게 되어 가는지 보입니다. 둘이 함께 오르면 실력이 느는 것이고, 문제집 점수만 오르고 모의고사가 제자리면 답을 외우고 있는 것입니다. 이 두 줄을 그린 그림이 <b>학습 곡선</b>입니다.</p></div>
   <figure class="dia"><div class="dia-t">손실(loss) 곡선의 세 가지 모양</div><div class="dia-b"><div class="cards"><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><line x1="10" y1="62" x2="110" y2="62" stroke="var(--line)"/><polyline fill="none" stroke="var(--accent)" stroke-width="2" points="10,14 20,18 30,21 40,23 50,24 60,25 70,26 80,26 90,27 100,27 110,27"/><polyline fill="none" stroke="var(--warn)" stroke-width="2" points="10,16 20,20 30,23 40,25 50,26 60,27 70,28 80,28 90,29 100,29 110,29"/></svg><span class="k">둘 다 나쁘다</span><b>과소적합</b><p>둘 다 높은 곳에서 내려오지 않는다. 아직 덜 배웠거나 모델이 너무 단순하다.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><line x1="10" y1="62" x2="110" y2="62" stroke="var(--line)"/><polyline fill="none" stroke="var(--accent)" stroke-width="2" points="10,12 20,24 30,33 40,40 50,45 60,49 70,52 80,54 90,56 100,57 110,58"/><polyline fill="none" stroke="var(--warn)" stroke-width="2" points="10,14 20,25 30,33 40,39 50,44 60,47 70,50 80,52 90,53 100,54 110,55"/></svg><span class="k">둘 다 좋아진다</span><b>잘 배우는 중</b><p>둘이 붙어서 함께 내려간다.</p></div><div class="card"><svg viewBox="0 0 120 70" aria-hidden="true"><rect width="120" height="70" fill="var(--surface)"/><line x1="10" y1="62" x2="110" y2="62" stroke="var(--line)"/><polyline fill="none" stroke="var(--accent)" stroke-width="2" points="10,12 20,24 30,33 40,40 50,46 60,50 70,54 80,57 90,59 100,60 110,61"/><polyline fill="none" stroke="var(--warn)" stroke-width="2" points="10,14 20,25 30,32 40,37 50,39 60,39 70,37 80,34 90,31 100,28 110,25"/></svg><span class="k">벌어진다</span><b>과적합</b><p>훈련은 계속 내려가는데 검증은 다시 올라간다. 외우기 시작했다.</p></div></div></div><figcaption>초록이 훈련, 주황이 검증입니다. 손실은 낮을수록 좋으므로 선이 아래로 내려갈수록 잘 배우는 것입니다. 정확도 곡선은 위아래가 뒤집힌 모양입니다. 개념을 보이기 위한 그림입니다.</figcaption></figure>
   <figure class="dia"><div class="dia-t">연습 데이터의 실제 학습 곡선 · C-4 실행의 accuracy</div><div class="dia-b"><svg viewBox="0 0 680 210" role="img" aria-label="accuracy 곡선"><line x1="52" y1="176.0" x2="664" y2="176.0" stroke="var(--line)"/><text x="44" y="180.0" font-size="11" fill="var(--muted)" text-anchor="end">0.975</text><line x1="52" y1="136.0" x2="664" y2="136.0" stroke="var(--line)"/><text x="44" y="140.0" font-size="11" fill="var(--muted)" text-anchor="end">0.981</text><line x1="52" y1="96.0" x2="664" y2="96.0" stroke="var(--line)"/><text x="44" y="100.0" font-size="11" fill="var(--muted)" text-anchor="end">0.988</text><line x1="52" y1="56.0" x2="664" y2="56.0" stroke="var(--line)"/><text x="44" y="60.0" font-size="11" fill="var(--muted)" text-anchor="end">0.994</text><line x1="52" y1="16.0" x2="664" y2="16.0" stroke="var(--line)"/><text x="44" y="20.0" font-size="11" fill="var(--muted)" text-anchor="end">1.000</text><text x="52.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">1</text><text x="157.5" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">6</text><text x="263.0" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">11</text><text x="368.6" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">16</text><text x="474.1" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">21</text><text x="579.6" y="198" font-size="11" fill="var(--muted)" text-anchor="middle">26</text><text x="664" y="198" font-size="11" fill="var(--muted)" text-anchor="end">epoch</text><polyline fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round" points="52.0,168.3 73.1,60.2 94.2,57.0 115.3,55.0 136.4,55.0 157.5,55.0 178.6,54.4 199.7,51.8 220.8,49.9 241.9,48.6 263.0,46.7 284.1,46.1 305.2,45.4 326.3,42.9 347.4,42.2 368.6,40.3 389.7,38.4 410.8,39.0 431.9,38.4 453.0,38.4 474.1,38.4 495.2,36.5 516.3,35.2 537.4,33.9 558.5,36.5 579.6,34.6 600.7,34.6 621.8,35.8 642.9,35.2 664.0,33.3"/><polyline fill="none" stroke="var(--warn)" stroke-width="2.5" stroke-linejoin="round" points="52.0,62.7 73.1,51.8 94.2,49.9 115.3,50.6 136.4,50.6 157.5,49.9 178.6,48.0 199.7,48.0 220.8,44.8 241.9,46.1 263.0,42.2 284.1,43.5 305.2,43.5 326.3,41.6 347.4,37.8 368.6,37.8 389.7,35.8 410.8,34.6 431.9,35.2 453.0,35.2 474.1,34.6 495.2,34.6 516.3,35.8 537.4,33.3 558.5,34.6 579.6,32.0 600.7,32.6 621.8,35.2 642.9,32.0 664.0,31.4"/></svg></div><figcaption>초록이 accuracy(훈련), 주황이 val_accuracy(검증)입니다. 첫 에폭에 크게 오른 뒤 둘이 붙어서 천천히 올라갑니다. 위 세 모양 가운데 가운데 것에 해당합니다.</figcaption></figure>
@@ -1875,6 +2424,23 @@ StandardScaler().fit_transform(new_df)                      # 하면 안 되는 
       <tr><td><code>info(dt_mae)</code></td><td><code>print(dt_mae)</code></td><td>출력 함수</td></tr>
     </tbody>
   </table></div>
+  <h3>헷갈리기 쉬운 짝</h3>
+  <div class="tbl"><table class=""><thead><tr><th>이것과</th><th>저것</th><th>가르는 기준</th></tr></thead><tbody>
+    <tr><td><code>=</code></td><td><code>==</code></td><td>담기 / 같은지 비교</td></tr>
+    <tr><td>리스트의 <code>+</code></td><td>배열의 <code>+</code></td><td>이어 붙이기 / 자리끼리 더하기</td></tr>
+    <tr><td><code>int(1.5)</code></td><td><code>round(1.5)</code></td><td>소수점 아래 버림 / 반올림</td></tr>
+    <tr><td><code>loc</code></td><td><code>iloc</code></td><td>이름으로 / 순서 번호로. loc의 구간은 끝을 포함한다</td></tr>
+    <tr><td><code>countplot</code></td><td><code>barplot</code></td><td>개수 / 평균</td></tr>
+    <tr><td><code>fit_transform</code></td><td><code>transform</code></td><td>훈련 데이터에 / 검증 데이터와 새 데이터에</td></tr>
+    <tr><td><code>predict</code></td><td><code>predict_proba</code></td><td>결론(0, 1) / 확률. AUC에는 확률</td></tr>
+    <tr><td><code>param_grid</code></td><td><code>param_distributions</code></td><td>GridSearchCV / RandomizedSearchCV. 뒤쪽은 <code>n_iter</code>도 필요</td></tr>
+    <tr><td><code>categorical_crossentropy</code></td><td><code>sparse_categorical_crossentropy</code></td><td>정답이 원-핫 / 정답이 번호 그대로</td></tr>
+    <tr><td><code>Dense(1, 'sigmoid')</code></td><td><code>Dense(K, 'softmax')</code></td><td>둘 중 하나 / K개 중 하나</td></tr>
+    <tr><td>accuracy, R², AUC</td><td>MAE, MSE, RMSE, loss</td><td>클수록 좋다 / 작을수록 좋다</td></tr>
+    <tr><td>Classifier</td><td>Regressor</td><td>정답이 보기 / 정답이 숫자</td></tr>
+    <tr><td><code>LogisticRegression</code></td><td><code>LinearRegression</code></td><td>분류 / 회귀. 이름에 속지 않는다</td></tr>
+  </tbody></table></div>
+
   <h3>실행하다 만나는 에러</h3>
   <p>직접 작성 문항에서는 내 코드가 에러를 냅니다. 아래 문구는 연습 데이터로 일부러 틀리게 써서 받은 것입니다. 버전에 따라 문구는 조금 다를 수 있지만 원인은 같습니다.</p>
   <div class="tbl"><table>
@@ -1960,6 +2526,21 @@ StandardScaler().fit_transform(new_df)                      # 하면 안 되는 
   <details><summary>[모델링] 새 고객 한 명의 데이터를 예측하려고 scaler.fit_transform(new_df)를 썼다. 무엇이 잘못됐나?</summary>
     <div class="ans"><p>한 건으로 평균과 표준편차를 새로 계산하므로 모든 값이 0이 됩니다. 어떤 입력을 넣어도 같은 예측이 나옵니다. 학습 때 만든 스케일러로 <code>transform</code>만 합니다.</p></div>
   </details>
+  <details><summary>[기초] a = [5, 6, 7, 8]일 때 a[1:3]과 a[-1]은?</summary>
+    <div class="ans"><p>[6, 7]과 8입니다. 자리 번호는 0부터 세고, 구간의 끝 번호(3)는 포함하지 않습니다. -1은 맨 끝입니다.</p></div>
+  </details>
+  <details><summary>[기초] np.array([1, 2]) + np.array([3, 4])와 [1, 2] + [3, 4]의 결과는?</summary>
+    <div class="ans"><p>앞은 [4 6], 뒤는 [1, 2, 3, 4]입니다. 배열은 같은 자리끼리 더하고, 리스트는 이어 붙입니다.</p></div>
+  </details>
+  <details><summary>[분석] "등급별 평균 가격"을 막대로 그리려는데 countplot을 썼다. 무엇이 잘못됐나?</summary>
+    <div class="ans"><p>countplot은 등급마다 행이 몇 개인지를 셉니다. 평균을 그리려면 <code>sns.barplot(data=df, x='등급', y='가격')</code>입니다.</p></div>
+  </details>
+  <details><summary>[모델링] roc_auc_score(y_valid, model.predict(X_valid))는 왜 바람직하지 않은가?</summary>
+    <div class="ans"><p>predict는 이미 0과 1로 잘라 낸 결론이라, 문턱을 옮겨 가며 보는 AUC의 재료가 되지 못합니다. <code>model.predict_proba(X_valid)[:, 1]</code>로 1일 확률을 넣습니다.</p></div>
+  </details>
+  <details><summary>[모델링] 보기가 4개인 분류에서 정답을 0~3 번호 그대로 두었다. 출력층과 손실은?</summary>
+    <div class="ans"><p><code>Dense(4, activation='softmax')</code>와 <code>sparse_categorical_crossentropy</code>입니다. 정답을 to_categorical로 원-핫으로 바꿨다면 손실을 <code>categorical_crossentropy</code>로 바꿉니다.</p></div>
+  </details>
 
   <h3>시험 직전 체크리스트</h3>
   <ul class="check">
@@ -1976,7 +2557,7 @@ StandardScaler().fit_transform(new_df)                      # 하면 안 되는 
   </ul>
 </section>
 
-<footer>출처: AICE Associate 출제 범위 안내(14문항, 90분, 데이터 분석 30점 · 데이터 전처리 30점 · AI 모델링 40점), AICE Associate 샘플 문항 분류(와인 품질등급)와 회귀(내비게이션 실주행시간) 노트북. 딥러닝 원리, 평가와 예측, 에러 대응 부분은 「AICE Associate 딥러닝 실전 교본」(newids.github.io/dl4aice)의 구성과 대조해 빠진 주제를 보완했습니다. "실행 결과"는 연습 데이터 pump_multivar.csv로 직접 돌린 값입니다(scikit-learn 1.5, TensorFlow 2.20 / Keras 3.10). 딥러닝 결과는 난수와 환경에 따라 소수 셋째 자리쯤에서 달라질 수 있습니다. C-0(XGBoost, LightGBM), 회귀 지표, 주석으로 처리한 줄은 실행하지 않았습니다. "연습용 예시 값"이라고 적은 숫자는 계산 연습을 위해 만든 값입니다.</footer>
+<footer>출처: AICE Associate 출제 범위 안내(14문항, 90분, 데이터 분석 30점 · 데이터 전처리 30점 · AI 모델링 40점), AICE Associate 샘플 문항 분류(와인 품질등급)와 회귀(내비게이션 실주행시간) 노트북. 다룰 주제의 범위는 「AICE Associate 합격의 기술」 01~05(파이썬 기초, 넘파이, 판다스, Seaborn, 머신러닝·딥러닝)와 「AICE Associate 딥러닝 실전 교본」(newids.github.io/dl4aice)에 대조해 빠진 것을 보완했고, 설명과 예제는 새로 썼습니다. "실행 결과"는 직접 돌린 값입니다(scikit-learn 1.5~1.6, TensorFlow 2.20 / Keras 3.10). 딥러닝 결과는 난수와 환경에 따라 소수 셋째 자리쯤에서 달라질 수 있습니다. C-0(XGBoost, LightGBM)과 A-3(그래프 그리기)은 실행하지 않았습니다. "연습용 예시 값"과 "설명을 위한 예시"라고 적은 숫자는 지어낸 값입니다.</footer>
 </div>
 <nav class="side right" id="navR" aria-label="빠른 이동"></nav>
 </div>
@@ -2017,7 +2598,7 @@ StandardScaler().fit_transform(new_df)                      # 하면 안 되는 
     var g=el('div','grid14');for(var k=1;k<=14;k++){if(nums[k]){var a=link(nums[k].h,String(k));a.dataset.n=k;g.appendChild(a);}}
     parent.appendChild(g);
     parent.appendChild(el('h5','', '자주 찾는 자료'));
-    var picks=[['샘플 문항 두 세트','문항별 비교 표'],['문항 유형은 세 가지','문항 유형 세 가지'],['먼저 가릴 것','분류와 회귀 구분'],['문항 9와 10 사이','모델 넣기 전 점검'],['문항 13 · 딥러닝 모델 학습','출력층 · 손실 조합'],['문항 14 뒤','예측값 바꾸는 법'],['실행하다 만나는 에러','에러 문구 모음'],['시험 직전 체크리스트','시험 직전 체크리스트']];
+    var picks=[['샘플 문항 두 세트','문항별 비교 표'],['문항 유형은 세 가지','문항 유형 세 가지'],['그래프 더 보기','그래프 고르는 표'],['먼저 가릴 것','분류와 회귀 구분'],['회귀라면','회귀 한 벌'],['ROC 곡선과 AUC','ROC · AUC'],['다중 분류 모델','다중 분류 한 벌'],['헷갈리기 쉬운 짝','헷갈리기 쉬운 짝'],['문항 9와 10 사이','모델 넣기 전 점검'],['문항 13 · 딥러닝 모델 학습','출력층 · 손실 조합'],['문항 14 뒤','예측값 바꾸는 법'],['실행하다 만나는 에러','에러 문구 모음'],['시험 직전 체크리스트','시험 직전 체크리스트']];
     picks.forEach(function(p){var h=[].find.call(wrap.querySelectorAll('h3'),function(x){return x.textContent.indexOf(p[0])>-1;});if(h)parent.appendChild(link(h,p[1]));});
     [['fix','정정 문항 패턴'],['terms','용어 정리'],['quiz','점검 문제']].forEach(function(p){var t=document.getElementById(p[0]);if(t)parent.appendChild(link(t,p[1]));});
   }
